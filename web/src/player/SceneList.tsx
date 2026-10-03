@@ -7,9 +7,10 @@ export function SceneList() {
   return (
     <section aria-labelledby="scenes-heading">
       <h2 id="scenes-heading">Scenes</h2>
-      <ul className="tile-grid">
+      <ul className="tile-grid scene-grid">
         {SCENES.map((scene) => (
-          <li key={scene.id} className="tile">
+          <li key={scene.id} className="tile" data-scene={scene.id}>
+            <div className="tile-art" aria-hidden="true" />
             <button
               type="button"
               className="tile-button"

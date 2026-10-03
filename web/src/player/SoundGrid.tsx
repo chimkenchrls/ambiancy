@@ -13,11 +13,12 @@ export function SoundGrid() {
   return (
     <section aria-labelledby="sounds-heading">
       <h2 id="sounds-heading">Sounds</h2>
-      <ul className="tile-grid">
+      <ul className="tile-grid sound-grid">
         {SOUNDS.map((sound) => {
           const isActive = active.has(sound.id)
           return (
-            <li key={sound.id} className="tile">
+            <li key={sound.id} className="tile" data-sound={sound.id}>
+              <div className="tile-art" aria-hidden="true" />
               <button
                 type="button"
                 className="tile-button"
