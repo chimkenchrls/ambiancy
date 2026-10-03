@@ -1,0 +1,102 @@
+[
+  {
+    "id": "rain",
+    "name": "Rain",
+    "description": "Steady rainfall on a quiet street.",
+    "audioFile": "audio/rain.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "wind",
+    "name": "Wind",
+    "description": "A low wind moving through open country.",
+    "audioFile": "audio/wind.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "creek",
+    "name": "Creek",
+    "description": "Water running over stones.",
+    "audioFile": "audio/creek.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "cicadas",
+    "name": "Cicadas",
+    "description": "A warm evening hum of insects.",
+    "audioFile": "audio/cicadas.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "coffee-shop",
+    "name": "Coffee Shop",
+    "description": "Soft chatter and clinking cups.",
+    "audioFile": "audio/coffee-shop.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "fireplace",
+    "name": "Fireplace",
+    "description": "A crackling fire close by.",
+    "audioFile": "audio/fireplace.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "birds-chirping",
+    "name": "Birds Chirping",
+    "description": "Morning birdsong in the trees.",
+    "audioFile": "audio/birds-chirping.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "ocean-waves",
+    "name": "Ocean Waves",
+    "description": "Waves rolling onto a beach.",
+    "audioFile": "audio/ocean-waves.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "thunderstorm",
+    "name": "Thunderstorm",
+    "description": "Distant thunder behind heavy rain.",
+    "audioFile": "audio/thunderstorm.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  },
+  {
+    "id": "night-forest",
+    "name": "Night Forest",
+    "description": "Rustling leaves after dark.",
+    "audioFile": "audio/night-forest.mp3",
+    "artwork": null,
+    "source": "Placeholder noise generated with FFmpeg (tools/make-dev-sounds.sh)",
+    "licence": "CC0-1.0",
+    "author": "Ambiancy"
+  }
+]
