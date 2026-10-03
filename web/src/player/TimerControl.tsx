@@ -1,24 +1,13 @@
 import { useState } from 'react'
-import { SLEEP_FADE_SECONDS, formatRemaining, type TimerMode } from '../timer/timer'
-import { useTimer } from '../timer/useTimer'
-import { useEngine } from './PlayerContext'
+import { formatRemaining, type TimerMode } from '../timer/timer'
+import { usePlayerTimer } from './PlayerContext'
 
 const MINUTE_OPTIONS = [15, 30, 45, 60]
 
 export function TimerControl() {
-  const engine = useEngine()
+  const { timer, remaining, message, start, cancel } = usePlayerTimer()
   const [mode, setMode] = useState<TimerMode>('sleep')
   const [minutes, setMinutes] = useState(30)
-  const [message, setMessage] = useState<string | null>(null)
-
-  const { timer, remaining, start, cancel } = useTimer((finished) => {
-    if (finished === 'sleep') {
-      void engine.fadeOut(SLEEP_FADE_SECONDS)
-      setMessage('Sleep timer finished. Fading out.')
-    } else {
-      setMessage('Focus session complete.')
-    }
-  })
 
   return (
     <section aria-labelledby="timer-heading">
@@ -35,7 +24,6 @@ export function TimerControl() {
           className="timer-form"
           onSubmit={(event) => {
             event.preventDefault()
-            setMessage(null)
             start(mode, minutes)
           }}
         >

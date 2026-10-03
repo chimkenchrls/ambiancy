@@ -1,6 +1,10 @@
 import { Link, Outlet } from 'react-router'
+import { useAudioBlocked, useEngine } from '../player/PlayerContext'
 
 export function Layout() {
+  const engine = useEngine()
+  const audioBlocked = useAudioBlocked()
+
   return (
     <>
       <header className="site-header">
@@ -11,6 +15,14 @@ export function Layout() {
           <Link to="/play">Player</Link>
         </nav>
       </header>
+      {audioBlocked && (
+        <p role="alert" className="audio-blocked">
+          Your browser paused the sound.{' '}
+          <button type="button" onClick={() => void engine.resumeAudio()}>
+            Resume sound
+          </button>
+        </p>
+      )}
       <Outlet />
       <footer className="site-footer">
         <Link to="/licences">Licences</Link>

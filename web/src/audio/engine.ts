@@ -35,6 +35,7 @@ export interface AudioContextLike {
   destination: unknown
   state: string
   resume(): Promise<void>
+  addEventListener(type: 'statechange', listener: () => void): void
   createGain(): GainNodeLike
   createBufferSource(): SourceNodeLike
 }
@@ -57,6 +58,10 @@ export interface AudioEngine {
   getMix(): Mix
   loadMix(mix: Mix): Promise<void>
   getLayers(): readonly LayerState[]
+  /** True when sounds should be audible but the browser has paused the audio context. */
+  isAudioBlocked(): boolean
+  /** Asks the browser to un-pause audio. Must be called from a click or tap. */
+  resumeAudio(): Promise<void>
   subscribe(listener: () => void): () => void
 }
 
@@ -87,6 +92,22 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
     listeners.forEach((listener) => listener())
   }
 
+  // Browsers pause the context on their own (a phone call, switching apps on iOS),
+  // so listeners need to hear about it to tell the visitor.
+  context.addEventListener('statechange', emit)
+
+  function resumeAudio(): Promise<void> {
+    if (context.state === 'running') return Promise.resolve()
+    return context.resume().catch(() => {
+      // The browser refused. isAudioBlocked() keeps reporting it.
+    })
+  }
+
+  function isAudioBlocked(): boolean {
+    if (context.state === 'running') return false
+    return [...entries.values()].some((entry) => entry.status === 'playing')
+  }
+
   function isCurrent(entry: Entry, token: number) {
     return entries.get(entry.soundId) === entry && entry.token === token
   }
@@ -96,7 +117,9 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
     entry.status = 'loading'
     emit()
     try {
-      if (context.state !== 'running') await context.resume()
+      // Not awaited: the download must not wait on the browser, and a source
+      // started on a paused context simply begins when the context wakes.
+      void resumeAudio()
       const buffer = await loadBuffer(entry.soundId)
       if (!isCurrent(entry, token)) return
 
@@ -245,6 +268,8 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
     getMix: () => [...entries.values()].map(({ soundId, volume }) => ({ soundId, volume })),
     loadMix,
     getLayers: () => snapshot,
+    isAudioBlocked,
+    resumeAudio,
     subscribe(listener) {
       listeners.add(listener)
       return () => {

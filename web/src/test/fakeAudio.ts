@@ -28,13 +28,22 @@ export function createFakeSource() {
 export function createFakeContext() {
   const gains: ReturnType<typeof createFakeGain>[] = []
   const sources: ReturnType<typeof createFakeSource>[] = []
+  const stateListeners: Array<() => void> = []
+  /** Changes the context state the way a browser does, telling listeners. */
+  function setState(state: string) {
+    context.state = state
+    stateListeners.forEach((listener) => listener())
+  }
   const context = {
     currentTime: 0,
     destination: { name: 'destination' },
     state: 'suspended' as string,
     resume: vi.fn(async () => {
-      context.state = 'running'
+      setState('running')
     }),
+    addEventListener(_type: 'statechange', listener: () => void) {
+      stateListeners.push(listener)
+    },
     createGain() {
       const gain = createFakeGain()
       gains.push(gain)
@@ -46,7 +55,7 @@ export function createFakeContext() {
       return source
     },
   }
-  return { context, gains, sources }
+  return { context, gains, sources, setState }
 }
 
 /** A loader whose downloads finish only when the test says so. */

@@ -1,9 +1,13 @@
-import { screen, within } from '@testing-library/react'
+import { act, fireEvent, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { AppRoutes } from './App'
 import { SCENES, SOUNDS } from './catalogue'
 import { renderWithEngine } from './test/renderWithEngine'
+
+afterEach(() => {
+  vi.useRealTimers()
+})
 
 describe('landing page', () => {
   it('introduces the product and links to the player', () => {
@@ -82,5 +86,65 @@ describe('other pages', () => {
     expect(screen.getByRole('link', { name: 'Ambiancy.' })).toHaveAttribute('href', '/')
     expect(screen.getByRole('link', { name: 'Player' })).toHaveAttribute('href', '/play')
     expect(screen.getByRole('link', { name: 'Licences' })).toHaveAttribute('href', '/licences')
+  })
+})
+
+describe('things that outlive one page', () => {
+  it('says so when the landing scene cannot load, and lets the visitor try again', async () => {
+    const user = userEvent.setup()
+    let fail = true
+    const loadBuffer = async (soundId: string) => {
+      if (fail) throw new Error('offline')
+      return { soundId }
+    }
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/', loadBuffer })
+
+    await user.click(screen.getByRole('button', { name: `Play ${SCENES[0]!.name}` }))
+    expect(await screen.findByRole('alert')).toHaveTextContent("Couldn't load")
+
+    fail = false
+    await user.click(screen.getByRole('button', { name: 'Try again' }))
+    await waitFor(() => expect(screen.queryByRole('alert')).not.toBeInTheDocument())
+    expect(engine.getLayers().every((layer) => layer.status === 'playing')).toBe(true)
+  })
+
+  it('keeps a sleep timer running after the visitor leaves the player page', () => {
+    vi.useFakeTimers()
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/play' })
+    const fadeOut = vi.spyOn(engine, 'fadeOut')
+
+    fireEvent.change(screen.getByLabelText('Minutes'), { target: { value: '15' } })
+    fireEvent.click(screen.getByRole('button', { name: 'Start timer' }))
+    fireEvent.click(screen.getByRole('link', { name: 'Licences' }))
+    expect(screen.getByRole('heading', { level: 1, name: 'Licences' })).toBeInTheDocument()
+
+    act(() => {
+      vi.advanceTimersByTime(5 * 60_000)
+    })
+    fireEvent.click(screen.getByRole('link', { name: 'Player' }))
+    expect(screen.getByRole('timer')).toHaveTextContent('10:00')
+    fireEvent.click(screen.getByRole('link', { name: 'Licences' }))
+
+    act(() => {
+      vi.advanceTimersByTime(10 * 60_000)
+    })
+    expect(fadeOut).toHaveBeenCalledExactlyOnceWith(30)
+
+    fireEvent.click(screen.getByRole('link', { name: 'Player' }))
+    expect(screen.getByRole('status')).toHaveTextContent('Sleep timer finished')
+  })
+
+  it('offers to resume when the browser pauses the sound', async () => {
+    const user = userEvent.setup()
+    const { context, setState } = renderWithEngine(<AppRoutes />, { route: '/play' })
+    await user.click(screen.getByRole('button', { name: 'Rain' }))
+    await screen.findByLabelText('Rain volume')
+    expect(screen.queryByRole('button', { name: 'Resume sound' })).not.toBeInTheDocument()
+
+    act(() => setState('interrupted'))
+    await user.click(await screen.findByRole('button', { name: 'Resume sound' }))
+
+    await waitFor(() => expect(screen.queryByRole('button', { name: 'Resume sound' })).not.toBeInTheDocument())
+    expect(context.state).toBe('running')
   })
 })

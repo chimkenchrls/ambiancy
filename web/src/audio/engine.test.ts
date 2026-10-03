@@ -255,3 +255,49 @@ describe('subscribing', () => {
     expect(engine.getLayers()).not.toBe(first)
   })
 })
+
+describe('browser audio state', () => {
+  it('starts the download without waiting for the audio context to wake', async () => {
+    const fake = createFakeContext()
+    fake.context.resume = vi.fn(() => new Promise<void>(() => {})) as typeof fake.context.resume
+    const engine = createAudioEngine({ context: fake.context, loadBuffer: instantLoader })
+
+    await engine.addLayer('rain', 70)
+
+    expect(fake.sources[0]?.start).toHaveBeenCalledOnce()
+    expect(engine.getLayers()[0]!.status).toBe('playing')
+  })
+
+  it('still starts the layer when waking the audio context fails', async () => {
+    const fake = createFakeContext()
+    fake.context.resume = vi.fn(async () => {
+      throw new Error('not allowed')
+    }) as typeof fake.context.resume
+    const engine = createAudioEngine({ context: fake.context, loadBuffer: instantLoader })
+
+    await engine.addLayer('rain', 70)
+
+    expect(engine.getLayers()[0]!.status).toBe('playing')
+  })
+
+  it('reports when the browser pauses playing audio, and recovers when resumed', async () => {
+    const { engine, setState } = setup()
+    await engine.addLayer('rain', 70)
+    expect(engine.isAudioBlocked()).toBe(false)
+
+    const listener = vi.fn()
+    engine.subscribe(listener)
+    setState('interrupted')
+    expect(engine.isAudioBlocked()).toBe(true)
+    expect(listener).toHaveBeenCalled()
+
+    await engine.resumeAudio()
+    expect(engine.isAudioBlocked()).toBe(false)
+  })
+
+  it('does not report blocked audio when nothing is playing', () => {
+    const { engine, setState } = setup()
+    setState('suspended')
+    expect(engine.isAudioBlocked()).toBe(false)
+  })
+})

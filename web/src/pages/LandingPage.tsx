@@ -7,6 +7,8 @@ export function LandingPage() {
   const layers = useLayers()
   const featured = SCENES[0]!
   const playing = layers.length > 0
+  const loading = layers.some((layer) => layer.status === 'loading')
+  const failed = layers.filter((layer) => layer.status === 'error')
 
   return (
     <main className="page landing">
@@ -30,6 +32,15 @@ export function LandingPage() {
           Open the player
         </Link>
       </div>
+      {loading && <p role="status">Loading…</p>}
+      {failed.length > 0 && (
+        <p role="alert">
+          Couldn't load {failed.length === layers.length ? 'the sound' : 'some of the sounds'}.{' '}
+          <button type="button" onClick={() => failed.forEach((layer) => void engine.retryLayer(layer.soundId))}>
+            Try again
+          </button>
+        </p>
+      )}
       <p className="hint">{featured.description} No account needed.</p>
     </main>
   )
