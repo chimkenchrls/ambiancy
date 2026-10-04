@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { SCENES, SOUNDS, audioUrl, getSound, isSoundId } from './index'
+import { SCENES, SOUNDS, artworkUrl, audioUrl, getSound, isSoundId } from './index'
 import { MAX_LAYERS } from '../mix/mix'
 
 describe('sound catalogue', () => {
@@ -15,6 +15,19 @@ describe('sound catalogue', () => {
       expect(sound.licence, sound.id).not.toBe('')
       expect(sound.author, sound.id).not.toBe('')
     }
+  })
+
+  it('records a picture for every sound, with its source, licence and author', () => {
+    for (const sound of SOUNDS) {
+      expect(sound.artwork, sound.id).toBe(`images/${sound.id}.webp`)
+      expect(sound.artworkSource, sound.id).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/)
+      expect(sound.artworkLicence, sound.id).not.toBe('')
+      expect(sound.artworkAuthor, sound.id).not.toBe('')
+    }
+  })
+
+  it('builds a picture address under the media base', () => {
+    expect(artworkUrl(getSound('rain')!)).toMatch(/^https?:\/\/.+\/images\/rain\.webp$/)
   })
 
   it('looks sounds up by id', () => {

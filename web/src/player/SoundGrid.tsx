@@ -1,5 +1,6 @@
 import { SOUNDS } from '../catalogue'
 import { MAX_LAYERS } from '../mix/mix'
+import { Artwork } from './Artwork'
 import { useEngine, useLayers } from './PlayerContext'
 
 export const DEFAULT_VOLUME = 60
@@ -18,7 +19,7 @@ export function SoundGrid() {
           const isActive = active.has(sound.id)
           return (
             <li key={sound.id} className="tile" data-sound={sound.id}>
-              <div className="tile-art" aria-hidden="true" />
+              <Artwork soundId={sound.id} />
               <button
                 type="button"
                 className="tile-button"

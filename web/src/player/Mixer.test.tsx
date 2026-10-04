@@ -112,6 +112,18 @@ describe('mixer', () => {
     expect(engine.getLayers().find((layer) => layer.soundId === 'rain')?.status).toBe('playing')
   })
 
+  it("shows each sound's photo, and drops it for the drawn fallback if it fails to load", () => {
+    const { container } = renderWithEngine(<Mixer />)
+    const rainTile = container.querySelector('.sound-grid [data-sound="rain"]')!
+    const photo = rainTile.querySelector('img')!
+    expect(photo.getAttribute('src')).toMatch(/\/images\/rain\.webp$/)
+
+    fireEvent.error(photo)
+
+    expect(rainTile.querySelector('img')).toBeNull()
+    expect(rainTile.querySelector('.tile-art')).not.toBeNull()
+  })
+
   it('changes the master volume and stops everything', async () => {
     const user = userEvent.setup()
     const { engine } = renderWithEngine(<Mixer />)

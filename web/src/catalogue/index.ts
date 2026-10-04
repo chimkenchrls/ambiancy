@@ -8,6 +8,9 @@ export interface Sound {
   description: string
   audioFile: string
   artwork: string | null
+  artworkSource: string
+  artworkLicence: string
+  artworkAuthor: string
   source: string
   licence: string
   author: string
@@ -37,4 +40,8 @@ const MEDIA_BASE_URL = (import.meta.env.VITE_MEDIA_BASE_URL ?? 'http://localhost
 
 export function audioUrl(sound: Sound): string {
   return `${MEDIA_BASE_URL}/${sound.audioFile}`
+}
+
+export function artworkUrl(sound: Sound): string | null {
+  return sound.artwork ? `${MEDIA_BASE_URL}/${sound.artwork}` : null
 }

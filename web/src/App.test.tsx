@@ -71,8 +71,17 @@ describe('other pages', () => {
     renderWithEngine(<AppRoutes />, { route: '/licences' })
 
     expect(screen.getByRole('heading', { level: 1, name: 'Licences' })).toBeInTheDocument()
-    expect(screen.getAllByRole('row')).toHaveLength(SOUNDS.length + 1)
-    expect(screen.getByRole('row', { name: /Rain/ })).toHaveTextContent('CC0-1.0')
+    const sounds = within(screen.getByRole('table', { name: 'Sounds' }))
+    expect(sounds.getAllByRole('row')).toHaveLength(SOUNDS.length + 1)
+    expect(sounds.getByRole('row', { name: /Rain/ })).toHaveTextContent('CC0-1.0')
+
+    const pictures = within(screen.getByRole('table', { name: 'Pictures' }))
+    expect(pictures.getAllByRole('row')).toHaveLength(SOUNDS.length + 1)
+    expect(pictures.getByRole('row', { name: /Rain/ })).toHaveTextContent(/CC|Public domain/)
+    expect(pictures.getByRole('link', { name: /Rain/ })).toHaveAttribute(
+      'href',
+      expect.stringContaining('commons.wikimedia.org'),
+    )
   })
 
   it('shows a not-found page for unknown addresses', () => {

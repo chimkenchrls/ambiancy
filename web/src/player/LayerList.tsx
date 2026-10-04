@@ -1,4 +1,5 @@
 import { getSound } from '../catalogue'
+import { Artwork } from './Artwork'
 import { useEngine, useLayers } from './PlayerContext'
 
 export function LayerList() {
@@ -15,6 +16,7 @@ export function LayerList() {
         const name = getSound(layer.soundId)?.name ?? layer.soundId
         return (
           <li key={layer.soundId} className="layer">
+            <Artwork soundId={layer.soundId} />
             <span className="layer-name">{name}</span>
             {layer.status === 'loading' && <span role="status">Loading…</span>}
             {layer.status === 'error' && (
@@ -33,8 +35,13 @@ export function LayerList() {
               aria-label={`${name} volume`}
               onChange={(event) => engine.setVolume(layer.soundId, Number(event.target.value))}
             />
-            <button type="button" onClick={() => engine.removeLayer(layer.soundId)}>
-              Remove {name}
+            <button
+              type="button"
+              className="icon-button"
+              aria-label={`Remove ${name}`}
+              onClick={() => engine.removeLayer(layer.soundId)}
+            >
+              ×
             </button>
           </li>
         )

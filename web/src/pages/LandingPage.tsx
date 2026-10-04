@@ -1,6 +1,8 @@
 import { Link } from 'react-router'
 import { SCENES, SOUNDS, getSound } from '../catalogue'
+import { Artwork } from '../player/Artwork'
 import { useEngine, useLayers } from '../player/PlayerContext'
+import { SceneList } from '../player/SceneList'
 
 export function LandingPage() {
   const engine = useEngine()
@@ -10,42 +12,64 @@ export function LandingPage() {
   const loading = layers.some((layer) => layer.status === 'loading')
   const failed = layers.filter((layer) => layer.status === 'error')
 
+  // The mini-player shows whatever is playing; before that, a preview of the featured scene.
+  const rows = playing ? layers : featured.layers
+  const playingScene = SCENES.find(
+    (scene) =>
+      scene.layers.length === layers.length &&
+      scene.layers.every((layer) => layers.some((live) => live.soundId === layer.soundId)),
+  )
+  const title = playing ? (playingScene?.name ?? 'Your mix') : featured.name
+
   return (
     <main className="landing">
       <section className="hero">
-        <div className="hero-copy">
-          <h1>Embrace the silence, feel the ambiance.</h1>
-          <p className="lead">
-            Ambiancy is a free ambient sound mixer. Layer rain, a fireplace or a coffee shop, set each one's volume,
-            and share the mix with a link.
-          </p>
-          <Link to="/play" className="button-link primary">
-            Open the player
-          </Link>
-          <p className="hint">Free. No account, nothing to install.</p>
+        <div className="hero-backdrop">
+          {/* The storm photo suits the palette; once something plays, the backdrop follows it. */}
+          <Artwork key={playing ? rows[0]!.soundId : 'idle'} soundId={playing ? rows[0]!.soundId : 'thunderstorm'} />
         </div>
+        <div className="hero-inner">
+          <div className="hero-copy">
+            <h1>Embrace the silence, feel the ambiance.</h1>
+            <p className="lead">
+              Ambiancy is a free ambient sound mixer. Layer rain, a fireplace or a coffee shop, set each one's volume,
+              and share the mix with a link.
+            </p>
+            <Link to="/play" className="button-link primary">
+              Open the player
+            </Link>
+            <p className="hint">Free. No account, nothing to install.</p>
+          </div>
 
-        {/* A working slice of the player, in place of a picture of it. */}
-        <div className="hero-player" data-scene={featured.id}>
-          <div className="tile-art" aria-hidden="true" />
-          <div className="hero-player-body">
-            <h2>{featured.name}</h2>
-            <p className="hint">{featured.description}</p>
+          {/* A working slice of the player, in place of a picture of it. */}
+          <div className="hero-player">
+            <div className="hero-player-head">
+              {playing && (
+                <span className="eq" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              )}
+              <h2>{title}</h2>
+            </div>
+            {!playing && <p className="hint">{featured.description}</p>}
             <ul className="hero-layers">
-              {featured.layers.map((layer) => {
-                const live = layers.find((candidate) => candidate.soundId === layer.soundId)
-                const name = getSound(layer.soundId)?.name ?? layer.soundId
+              {rows.map((row) => {
+                const live = layers.find((candidate) => candidate.soundId === row.soundId)
+                const name = getSound(row.soundId)?.name ?? row.soundId
                 return (
-                  <li key={layer.soundId}>
+                  <li key={row.soundId}>
+                    <Artwork soundId={row.soundId} />
                     <span>{name}</span>
                     <input
                       type="range"
                       min={0}
                       max={100}
-                      value={live?.volume ?? layer.volume}
+                      value={live?.volume ?? row.volume}
                       disabled={!live}
                       aria-label={`${name} volume`}
-                      onChange={(event) => engine.setVolume(layer.soundId, Number(event.target.value))}
+                      onChange={(event) => engine.setVolume(row.soundId, Number(event.target.value))}
                     />
                   </li>
                 )
@@ -74,16 +98,42 @@ export function LandingPage() {
         </div>
       </section>
 
-      <section className="sound-strip" aria-labelledby="sound-strip-heading">
-        <h2 id="sound-strip-heading">{SOUNDS.length} sounds to layer</h2>
+      <div className="landing-section">
+        <SceneList />
+        <p className="hint">Pick a scene to hear it here, then open the player to make it your own.</p>
+      </div>
+
+      <section className="landing-section features" aria-labelledby="features-heading">
+        <h2 id="features-heading">What you can do</h2>
+        <ul>
+          <li>
+            <h3>Layer up to eight sounds</h3>
+            <p>Each sound has its own volume, so the rain can sit under the fire or drown it out.</p>
+          </li>
+          <li>
+            <h3>Fall asleep to it</h3>
+            <p>Set a sleep timer and the mix fades out when it finishes. A focus timer tells you when to take a break.</p>
+          </li>
+          <li>
+            <h3>Share a mix with a link</h3>
+            <p>The link carries the whole mix, so it opens the same sounds for anyone, without an account.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section className="landing-section gallery" aria-labelledby="gallery-heading">
+        <h2 id="gallery-heading">{SOUNDS.length} sounds to layer</h2>
         <ul>
           {SOUNDS.map((sound) => (
-            <li key={sound.id} data-sound={sound.id}>
-              <div className="tile-art" aria-hidden="true" />
+            <li key={sound.id}>
+              <Artwork soundId={sound.id} />
               <span>{sound.name}</span>
             </li>
           ))}
         </ul>
+        <Link to="/play" className="button-link">
+          Start mixing
+        </Link>
       </section>
     </main>
   )

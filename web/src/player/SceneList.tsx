@@ -1,4 +1,5 @@
 import { SCENES } from '../catalogue'
+import { Artwork } from './Artwork'
 import { useEngine } from './PlayerContext'
 
 export function SceneList() {
@@ -10,7 +11,7 @@ export function SceneList() {
       <ul className="tile-grid scene-grid">
         {SCENES.map((scene) => (
           <li key={scene.id} className="tile" data-scene={scene.id}>
-            <div className="tile-art" aria-hidden="true" />
+            <Artwork soundId={scene.layers[0]!.soundId} />
             <button
               type="button"
               className="tile-button"
