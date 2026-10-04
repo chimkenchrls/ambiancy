@@ -1,11 +1,20 @@
 import { Link } from 'react-router'
 import { AudioBlockedNotice } from './AudioBlockedNotice'
 import { LayerList } from './LayerList'
+import { Library } from './Library'
 import { NowPlayingBar } from './NowPlayingBar'
 import { SceneList } from './SceneList'
 import { ShareButton } from './ShareButton'
 import { SoundGrid } from './SoundGrid'
 import { TimerControl } from './TimerControl'
+
+function NavIcon({ path }: { path: string }) {
+  return (
+    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+      <path d={path} />
+    </svg>
+  )
+}
 
 function greeting(hour: number): string {
   if (hour < 12) return 'Good morning'
@@ -24,11 +33,19 @@ export function PlayerPage() {
         </Link>
         <nav aria-label="Player" className="app-nav">
           <a href="#top" aria-current="page">
+            <NavIcon path="M4 11.2 12 4l8 7.2V20h-5.5v-5.5h-5V20H4z" />
             Home
           </a>
-          <a href="#scenes">Scenes</a>
-          <a href="#sounds">Sounds</a>
+          <a href="#scenes">
+            <NavIcon path="M4 5h7v7H4zM13 5h7v7h-7zM4 14h7v6H4zM13 14h7v6h-7z" />
+            Scenes
+          </a>
+          <a href="#sounds">
+            <NavIcon path="M4 9.5h2v5H4zM8 6h2v12H8zM12 3.5h2v17h-2zM16 7.5h2v9h-2zM20 10h2v4h-2z" />
+            Sounds
+          </a>
         </nav>
+        <Library />
         <div className="app-side-foot">
           <Link to="/">About Ambiancy</Link>
           <Link to="/licences">Licences</Link>
