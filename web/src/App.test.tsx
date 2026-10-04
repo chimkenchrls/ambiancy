@@ -44,6 +44,56 @@ describe('landing page', () => {
   })
 })
 
+describe('landing page sections', () => {
+  it('suggests a scene for focus, relaxing and sleep, playable in place', async () => {
+    const user = userEvent.setup()
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/' })
+    const madeFor = within(screen.getByRole('region', { name: 'Made for' }))
+    expect(madeFor.getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual([
+      'Focus',
+      'Relax',
+      'Sleep',
+    ])
+
+    const scene = SCENES.find((candidate) => candidate.id === 'forest-night')!
+    await user.click(madeFor.getByRole('button', { name: `Hear ${scene.name}` }))
+    expect(engine.getMix()).toEqual(scene.layers)
+
+    await user.click(await madeFor.findByRole('button', { name: `Stop ${scene.name}` }))
+    expect(engine.getMix()).toEqual([])
+  })
+
+  it('explains how it works in three steps', () => {
+    renderWithEngine(<AppRoutes />, { route: '/' })
+    const steps = within(screen.getByRole('region', { name: 'How it works' }))
+    expect(steps.getAllByRole('listitem')).toHaveLength(3)
+  })
+
+  it('answers common questions', () => {
+    renderWithEngine(<AppRoutes />, { route: '/' })
+    const questions = within(screen.getByRole('region', { name: 'Questions' }))
+    expect(questions.getByText('Is Ambiancy free?')).toBeInTheDocument()
+    expect(questions.getByText('Can I save my mixes?')).toBeInTheDocument()
+    expect(questions.getByRole('link', { name: 'Licences page' })).toHaveAttribute('href', '/licences')
+  })
+
+  it('says where the project comes from and links to its code', () => {
+    renderWithEngine(<AppRoutes />, { route: '/' })
+    const about = within(screen.getByRole('region', { name: 'About the project' }))
+    expect(about.getByRole('link', { name: 'View the code on GitHub' })).toHaveAttribute(
+      'href',
+      'https://github.com/chimkenchrls/ambiancy',
+    )
+  })
+
+  it('ends with a way into the player', () => {
+    renderWithEngine(<AppRoutes />, { route: '/' })
+    const start = screen.getByRole('link', { name: 'Start mixing' })
+    expect(start).toHaveAttribute('href', '/play')
+    expect(start).toHaveAttribute('target', '_blank')
+  })
+})
+
 describe('shared mix page', () => {
   it('shows the mix from the link without playing it until the visitor clicks', async () => {
     const user = userEvent.setup()

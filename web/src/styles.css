@@ -377,7 +377,8 @@ input[type='range'] {
   margin-top: 1rem;
 }
 
-.features ul {
+/* Made for: three photo panels, each with a scene to hear. */
+.made-for ul {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -386,26 +387,196 @@ input[type='range'] {
   gap: 1.25rem;
 }
 
-.features li {
+.made-for li {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: 21rem;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.made-for .tile-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transition: transform 0.6s ease;
+}
+
+.made-for li:hover .tile-art {
+  transform: scale(1.05);
+}
+
+.made-for .tile-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--shade) 8%, rgba(21, 14, 26, 0.55) 45%, rgba(21, 14, 26, 0.1) 80%);
+}
+
+.made-for-body {
+  padding: 1.5rem;
+}
+
+.made-for h3 {
+  font-size: 1.8rem;
+}
+
+.made-for p {
+  margin: 0.5rem 0 1.1rem;
+  color: #e4dcee;
+}
+
+.made-for button {
+  background: rgba(21, 14, 26, 0.55);
+  border-color: var(--lavender);
+  backdrop-filter: blur(6px);
+}
+
+/* How it works: a real sequence, so the steps are numbered. */
+.steps ol {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.steps li {
+  counter-increment: step;
   background: var(--ink);
   border: 1px solid var(--line);
   border-radius: 18px;
   padding: 1.5rem;
 }
 
-.features h3 {
-  font-size: 1.2rem;
-  color: var(--lavender);
+.steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--lilac);
+  color: #ffffff;
+  font-weight: 700;
 }
 
-.features p {
+.steps h3 {
+  font-size: 1.2rem;
+}
+
+.steps p {
   margin: 0.6rem 0 0;
   color: #dcd3e7;
 }
 
+.questions details {
+  border-bottom: 1px solid var(--line);
+  max-width: 46rem;
+}
+
+.questions summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.questions summary::marker {
+  color: var(--lilac);
+}
+
+.questions details p {
+  margin: 0 0 1.1rem;
+  color: #dcd3e7;
+  max-width: 40rem;
+}
+
+.about p {
+  max-width: 44rem;
+  color: #dcd3e7;
+  margin: 0 0 1rem;
+}
+
+.about .button-link {
+  margin-top: 0.5rem;
+}
+
+.closing {
+  text-align: center;
+  padding: 5rem 2rem 5.5rem;
+  background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(106, 78, 152, 0.4), transparent);
+}
+
+.closing h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin-bottom: 1.75rem;
+  color: #ffffff;
+}
+
+/* ---------- Motion ---------- */
+
+/* One entrance when the page loads: the hero's pieces rise in turn. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+.hero-copy > *,
+.hero-player {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.hero-copy > :nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.hero-copy > :nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.hero-copy > :nth-child(4) {
+  animation-delay: 0.34s;
+}
+
+.hero-player {
+  animation-delay: 0.45s;
+}
+
+/* The backdrop photo drifts slowly, once. */
+@keyframes drift {
+  from {
+    transform: scale(1.12);
+  }
+}
+
+.hero-backdrop .tile-art img {
+  animation: drift 18s ease-out backwards;
+}
+
+/* Sections fade up the first time they scroll into view. */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 .gallery ul {
   list-style: none;
-  margin: 0 0 1.75rem;
+  margin: 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
@@ -1204,8 +1375,13 @@ thead th {
     padding-right: 1.25rem;
   }
 
-  .features ul {
+  .made-for ul,
+  .steps ol {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .made-for li {
+    min-height: 16rem;
   }
 
   .gallery ul {
@@ -1223,5 +1399,10 @@ thead th {
     transition: none !important;
     animation: none !important;
     scroll-behavior: auto !important;
+  }
+
+  .reveal-ready .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
