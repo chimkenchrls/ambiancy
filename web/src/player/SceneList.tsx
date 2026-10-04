@@ -6,7 +6,7 @@ export function SceneList() {
   const engine = useEngine()
 
   return (
-    <section aria-labelledby="scenes-heading">
+    <section aria-labelledby="scenes-heading" id="scenes">
       <h2 id="scenes-heading">Scenes</h2>
       <ul className="tile-grid scene-grid">
         {SCENES.map((scene) => (

@@ -12,7 +12,7 @@ export function SoundGrid() {
   const full = layers.length >= MAX_LAYERS
 
   return (
-    <section aria-labelledby="sounds-heading">
+    <section aria-labelledby="sounds-heading" id="sounds">
       <h2 id="sounds-heading">Sounds</h2>
       <ul className="tile-grid sound-grid">
         {SOUNDS.map((sound) => {

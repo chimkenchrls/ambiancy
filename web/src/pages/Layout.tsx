@@ -1,16 +1,13 @@
-import { Link, NavLink, Outlet, useLocation } from 'react-router'
-import { useAudioBlocked, useEngine } from '../player/PlayerContext'
+import { Link, NavLink, Outlet } from 'react-router'
+import { AudioBlockedNotice } from '../player/AudioBlockedNotice'
+import { useEngine } from '../player/PlayerContext'
 
+/** The frame for the site's pages. The player is separate and has its own. */
 export function Layout() {
   const engine = useEngine()
-  const audioBlocked = useAudioBlocked()
-  const { pathname } = useLocation()
-  // The player keeps the original app's dark look with a sidebar; every other
-  // page uses the light site look with a top bar.
-  const inPlayer = pathname === '/play'
 
   return (
-    <div className={inPlayer ? 'shell shell-player' : 'shell shell-site'}>
+    <div className="shell">
       <header className="site-header">
         <Link to="/" className="brand">
           Ambian<span className="brand-accent">cy.</span>
@@ -19,22 +16,16 @@ export function Layout() {
           <NavLink to="/" end>
             Home
           </NavLink>
-          <NavLink to="/play">Player</NavLink>
           <NavLink to="/licences">Licences</NavLink>
         </nav>
+        {/* Its own tab with its own audio, so this tab goes quiet. */}
+        <Link to="/play" target="_blank" rel="noopener" className="button-link primary" onClick={() => engine.stopAll()}>
+          Open web player
+        </Link>
       </header>
-      <div className="shell-body">
-        {audioBlocked && (
-          <p role="alert" className="audio-blocked">
-            Your browser paused the sound.{' '}
-            <button type="button" onClick={() => void engine.resumeAudio()}>
-              Resume sound
-            </button>
-          </p>
-        )}
-        <Outlet />
-        <footer className="site-footer">Ambiancy is a free ambient sound mixer. No account needed.</footer>
-      </div>
+      <AudioBlockedNotice />
+      <Outlet />
+      <footer className="site-footer">Ambiancy is a free ambient sound mixer. No account needed.</footer>
     </div>
   )
 }

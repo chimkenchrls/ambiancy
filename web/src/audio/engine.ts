@@ -35,6 +35,7 @@ export interface AudioContextLike {
   destination: unknown
   state: string
   resume(): Promise<void>
+  suspend(): Promise<void>
   addEventListener(type: 'statechange', listener: () => void): void
   createGain(): GainNodeLike
   createBufferSource(): SourceNodeLike
@@ -60,8 +61,11 @@ export interface AudioEngine {
   getLayers(): readonly LayerState[]
   /** True when sounds should be audible but the browser has paused the audio context. */
   isAudioBlocked(): boolean
-  /** Asks the browser to un-pause audio. Must be called from a click or tap. */
+  /** Un-pauses audio, whether the visitor or the browser paused it. Must be called from a click or tap. */
   resumeAudio(): Promise<void>
+  /** Pauses every sound, keeping the mix. */
+  pause(): Promise<void>
+  isPaused(): boolean
   subscribe(listener: () => void): () => void
 }
 
@@ -84,6 +88,7 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
   let snapshot: readonly LayerState[] = []
   let masterVolume = 100
   let nextToken = 1
+  let paused = false
   let fadeTimer: ReturnType<typeof setTimeout> | null = null
   let resolveFade: (() => void) | null = null
 
@@ -97,14 +102,28 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
   context.addEventListener('statechange', emit)
 
   function resumeAudio(): Promise<void> {
+    if (paused) {
+      paused = false
+      emit()
+    }
     if (context.state === 'running') return Promise.resolve()
     return context.resume().catch(() => {
       // The browser refused. isAudioBlocked() keeps reporting it.
     })
   }
 
+  function pause(): Promise<void> {
+    if (entries.size === 0 || paused) return Promise.resolve()
+    cancelFade()
+    paused = true
+    emit()
+    return context.suspend().catch(() => {
+      // Nothing to do: the sound keeps playing and the visitor can try again.
+    })
+  }
+
   function isAudioBlocked(): boolean {
-    if (context.state === 'running') return false
+    if (paused || context.state === 'running') return false
     return [...entries.values()].some((entry) => entry.status === 'playing')
   }
 
@@ -229,6 +248,7 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
 
   function stopAll() {
     endFade()
+    paused = false
     entries.forEach(teardown)
     entries.clear()
     applyMasterVolume()
@@ -270,6 +290,8 @@ export function createAudioEngine({ context, loadBuffer }: EngineDeps): AudioEng
     getLayers: () => snapshot,
     isAudioBlocked,
     resumeAudio,
+    pause,
+    isPaused: () => paused,
     subscribe(listener) {
       listeners.add(listener)
       return () => {

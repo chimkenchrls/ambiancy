@@ -301,3 +301,51 @@ describe('browser audio state', () => {
     expect(engine.isAudioBlocked()).toBe(false)
   })
 })
+
+describe('pausing', () => {
+  it('pauses and resumes without losing the mix', async () => {
+    const { engine, context } = setup()
+    await engine.addLayer('rain', 70)
+
+    await engine.pause()
+    expect(engine.isPaused()).toBe(true)
+    expect(context.state).toBe('suspended')
+    expect(engine.getMix()).toEqual([{ soundId: 'rain', volume: 70 }])
+
+    await engine.resumeAudio()
+    expect(engine.isPaused()).toBe(false)
+    expect(context.state).toBe('running')
+  })
+
+  it('does not report a pause the visitor asked for as the browser blocking audio', async () => {
+    const { engine } = setup()
+    await engine.addLayer('rain', 70)
+    await engine.pause()
+    expect(engine.isAudioBlocked()).toBe(false)
+  })
+
+  it('starts playing again when a sound is added while paused', async () => {
+    const { engine, context } = setup()
+    await engine.addLayer('rain', 70)
+    await engine.pause()
+
+    await engine.addLayer('wind', 40)
+
+    expect(engine.isPaused()).toBe(false)
+    expect(context.state).toBe('running')
+  })
+
+  it('is no longer paused once everything is stopped', async () => {
+    const { engine } = setup()
+    await engine.addLayer('rain', 70)
+    await engine.pause()
+    engine.stopAll()
+    expect(engine.isPaused()).toBe(false)
+  })
+
+  it('does nothing when the mix is empty', async () => {
+    const { engine } = setup()
+    await engine.pause()
+    expect(engine.isPaused()).toBe(false)
+  })
+})

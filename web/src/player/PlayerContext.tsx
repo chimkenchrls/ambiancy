@@ -79,6 +79,11 @@ export function useMasterVolume(): number {
   return useSyncExternalStore(engine.subscribe, engine.getMasterVolume)
 }
 
+export function usePaused(): boolean {
+  const engine = useEngine()
+  return useSyncExternalStore(engine.subscribe, engine.isPaused)
+}
+
 export function useAudioBlocked(): boolean {
   const engine = useEngine()
   return useSyncExternalStore(engine.subscribe, engine.isAudioBlocked)

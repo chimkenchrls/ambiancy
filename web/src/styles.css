@@ -224,7 +224,7 @@ input[type='range'] {
   color: var(--lilac);
 }
 
-.shell-site .site-header {
+.site-header {
   position: sticky;
   top: 0;
   z-index: 10;
@@ -242,6 +242,12 @@ input[type='range'] {
 .site-nav {
   display: flex;
   gap: 0.4rem;
+  margin-left: auto;
+}
+
+.site-header .button-link.primary {
+  padding: 0.5rem 1.2rem;
+  box-shadow: none;
 }
 
 .site-nav a {
@@ -501,154 +507,29 @@ thead th {
   background: var(--plum);
 }
 
-/* ---------- Player shell: sidebar on the left, as in the original app ---------- */
-
-.shell-player {
-  display: grid;
-  grid-template-columns: 15rem minmax(0, 1fr);
-}
-
-.shell-player .site-header {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  gap: 2.25rem;
-  padding: 1.75rem 1.25rem;
-  background: var(--ink);
-  border-right: 1px solid var(--line);
-}
-
-.shell-player .brand {
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  padding-left: 0.5rem;
-}
-
-.shell-player .site-nav {
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.shell-player .site-nav a {
-  border-radius: 12px;
-  padding: 0.65rem 1rem;
-  font-weight: 700;
-}
-
-.shell-player .site-footer {
-  display: none;
-}
-
-.player {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 20rem;
-  gap: 2rem;
-  align-items: start;
-  padding: 2rem 2rem 3rem;
-}
-
-.player h1 {
-  font-size: 1.7rem;
-}
-
-.player h2 {
-  font-size: 1rem;
-  margin: 1.9rem 0 0.9rem;
-  color: var(--lavender);
-}
-
-.player-rail {
-  position: sticky;
-  top: 2rem;
-  display: grid;
-  gap: 1.25rem;
-}
-
-.player-rail > section {
-  background: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 1.25rem;
-  scroll-margin-top: 1rem;
-}
-
-.player-rail h2 {
-  margin-top: 0;
-  font-size: 1.15rem;
-  color: #ffffff;
-}
-
-/* ---------- Sound and scene cards ---------- */
+/* ---------- Cards shared by the site and the player ---------- */
 
 .tile-grid {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
-  gap: 1.1rem;
-}
-
-.scene-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 0.9rem;
 }
 
 .tile {
   position: relative;
-  display: grid;
-  align-content: start;
-  background: var(--ink);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  overflow: hidden;
-  transition: transform 0.18s, border-color 0.18s, box-shadow 0.18s;
-}
-
-.tile:hover:not(:has(:disabled)) {
-  transform: translateY(-3px);
-  border-color: var(--lilac);
-}
-
-.tile .tile-art {
-  grid-area: 1 / 1;
-  aspect-ratio: 4 / 3;
-}
-
-.scene-grid .tile .tile-art {
-  aspect-ratio: 16 / 11;
-}
-
-/* Darkens the bottom of the photo so the name stays readable on any picture. */
-.tile .tile-art::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, var(--shade) 0%, rgba(21, 14, 26, 0.2) 55%, transparent);
+  transition: background-color 0.18s;
 }
 
 .tile-button {
-  grid-area: 1 / 1;
-  align-self: end;
-  justify-self: start;
-  z-index: 1;
   font: inherit;
   font-weight: 700;
-  font-size: 1.1rem;
   color: #ffffff;
   background: none;
   border: 0;
   padding: 0;
-  margin: 0 0.9rem 0.65rem;
   text-align: left;
   cursor: pointer;
-}
-
-.scene-grid .tile-button {
-  font-size: 1rem;
-  margin: 0 0.75rem 0.55rem;
 }
 
 /* The name is the button; this stretches its click area over the whole card. */
@@ -669,42 +550,8 @@ thead th {
 
 .tile-description {
   margin: 0;
-  padding: 0.65rem 0.9rem 0.8rem;
   color: var(--muted);
   font-size: 0.85rem;
-}
-
-.scene-grid .tile-description {
-  padding: 0.55rem 0.75rem 0.7rem;
-  font-size: 0.8rem;
-}
-
-.tile:has(.tile-button[aria-pressed='true']) {
-  border-color: var(--lavender);
-  box-shadow: 0 0 0 2px var(--lavender), 0 14px 34px rgba(106, 78, 152, 0.5);
-}
-
-/* Moving bars in the corner of a card that is playing. */
-.tile:has(.tile-button[aria-pressed='true'])::before {
-  content: '';
-  position: absolute;
-  top: 0.7rem;
-  right: 0.7rem;
-  z-index: 1;
-  width: 18px;
-  height: 16px;
-  background:
-    linear-gradient(#fff, #fff) 0 100% / 4px 55% no-repeat,
-    linear-gradient(#fff, #fff) 7px 100% / 4px 100% no-repeat,
-    linear-gradient(#fff, #fff) 14px 100% / 4px 35% no-repeat;
-  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
-  animation: tile-eq 0.9s ease-in-out infinite alternate;
-}
-
-@keyframes tile-eq {
-  to {
-    background-size: 4px 100%, 4px 40%, 4px 85%;
-  }
 }
 
 .tile:has(:disabled) {
@@ -713,6 +560,254 @@ thead th {
 
 .tile:has(:disabled) .tile-button {
   cursor: not-allowed;
+}
+
+/* Scenes: compact tiles, a square picture with the name beside it. */
+.scene-grid {
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.6rem;
+}
+
+.scene-grid .tile {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.9rem;
+  padding-right: 0.9rem;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.scene-grid .tile:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.scene-grid .tile-art {
+  grid-row: 1 / span 2;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.scene-grid .tile-button {
+  align-self: end;
+}
+
+.scene-grid .tile-description {
+  align-self: start;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sounds: a square picture, the name and a line of description under it. */
+.sound-grid {
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.4rem;
+}
+
+.sound-grid .tile {
+  padding: 0.8rem;
+  border-radius: 10px;
+}
+
+.sound-grid .tile:hover:not(:has(:disabled)) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sound-grid .tile-art {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.sound-grid .tile-button {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.sound-grid .tile-description {
+  margin-top: 0.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The round button on the picture: appears on hover, stays while playing. */
+.sound-grid .tile-art::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--lavender)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23150e1a' d='M8.5 5.5v13l10.5-6.5z'/%3E%3C/svg%3E")
+    center / 1.5rem no-repeat;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.18s, transform 0.18s;
+}
+
+.sound-grid .tile:hover:not(:has(:disabled)) .tile-art::after,
+.sound-grid .tile:has(.tile-button:focus-visible) .tile-art::after,
+.sound-grid .tile:has([aria-pressed='true']) .tile-art::after {
+  opacity: 1;
+  transform: none;
+}
+
+.sound-grid .tile:has([aria-pressed='true']) .tile-art::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23150e1a' d='M7 5.5h3.5v13H7zM13.5 5.5H17v13h-3.5z'/%3E%3C/svg%3E");
+}
+
+.sound-grid .tile:has([aria-pressed='true']) {
+  background: rgba(201, 182, 228, 0.12);
+}
+
+.tile-button[aria-pressed='true'] {
+  color: var(--lavender);
+}
+
+/* ---------- Player: three panels and a bar, on black ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.app {
+  --panel: #1a1220;
+  display: grid;
+  grid-template-columns: 14.5rem minmax(0, 1fr) 21rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'side main queue'
+    'bar bar bar';
+  gap: 0.5rem;
+  height: 100vh;
+  padding: 0.5rem 0.5rem 0;
+  background: #0a070d;
+}
+
+.app-side,
+.app-main,
+.app-queue {
+  background: var(--panel);
+  border-radius: 12px;
+}
+
+.app-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  padding: 1.4rem 0.9rem 1.1rem;
+}
+
+.app-side .brand {
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding-left: 0.75rem;
+}
+
+.app-nav {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.app-nav a {
+  color: var(--muted);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.18s, background-color 0.18s;
+}
+
+.app-nav a:hover {
+  color: #ffffff;
+}
+
+.app-nav a[aria-current='page'] {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-side-foot {
+  margin-top: auto;
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.app-side-foot a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.app-side-foot a:hover {
+  color: #ffffff;
+}
+
+/* The purple wash at the top scrolls away with the content. */
+.app-main {
+  grid-area: main;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 1.5rem 1.5rem 2.5rem;
+  background: linear-gradient(180deg, #4b3574 0, var(--panel) 19rem) local;
+}
+
+.app-main .audio-blocked {
+  margin: 0 0 1rem;
+}
+
+.greeting {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.4rem 0 1.4rem;
+}
+
+.app-main h2 {
+  font-size: 1.4rem;
+  margin: 2.25rem 0 1rem;
+  scroll-margin-top: 1rem;
+}
+
+.app-main section:first-of-type h2 {
+  margin-top: 0;
+}
+
+.app-main .sound-grid {
+  margin: 0 -0.8rem;
+}
+
+.app-queue {
+  grid-area: queue;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.app-queue h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.6rem;
+}
+
+.app-queue > section + section {
+  border-top: 1px solid var(--line);
+  padding-top: 1.4rem;
 }
 
 /* ---------- Your mix ---------- */
@@ -728,8 +823,7 @@ thead th {
   grid-template-columns: 2.75rem minmax(0, 1fr) auto;
   align-items: center;
   gap: 0.3rem 0.75rem;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--line);
+  padding: 0.7rem 0;
 }
 
 .layer .tile-art {
@@ -737,7 +831,7 @@ thead th {
   grid-row: 1 / span 2;
   width: 2.75rem;
   height: 2.75rem;
-  border-radius: 10px;
+  border-radius: 6px;
 }
 
 .layer-name {
@@ -749,6 +843,9 @@ thead th {
 .layer .icon-button {
   grid-column: 3;
   grid-row: 1;
+  background: none;
+  border-color: transparent;
+  color: var(--muted);
 }
 
 .layer input[type='range'] {
@@ -761,24 +858,6 @@ thead th {
   grid-column: 2 / -1;
   grid-row: 3;
   font-size: 0.85rem;
-}
-
-.master {
-  display: grid;
-  gap: 0.75rem;
-  margin: 1rem 0;
-}
-
-.master button {
-  justify-self: start;
-}
-
-.master label,
-.timer-form label {
-  display: grid;
-  gap: 0.25rem;
-  font-size: 0.9rem;
-  color: var(--muted);
 }
 
 .share input {
@@ -799,6 +878,14 @@ thead th {
   gap: 0.75rem;
 }
 
+.timer-form label,
+.master label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
 .timer-form button {
   grid-column: 1 / -1;
 }
@@ -809,44 +896,225 @@ thead th {
   font-variant-numeric: tabular-nums;
 }
 
-/* Only on narrow screens, where the mix sits below the sounds. */
-.mix-dock {
-  display: none;
+/* ---------- Now-playing bar ---------- */
+
+.now-bar {
+  grid-area: bar;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem 0.9rem;
+}
+
+.now-info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.now-thumbs {
+  display: flex;
+}
+
+.now-thumbs .tile-art {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 8px;
+  border: 2px solid #0a070d;
+}
+
+.now-thumbs .tile-art + .tile-art {
+  margin-left: -1.6rem;
+}
+
+.now-text p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-title {
+  font-weight: 700;
+}
+
+.now-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.now-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.play-button {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0a070d;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s;
+}
+
+.play-button svg {
+  fill: currentColor;
+}
+
+.play-button:hover:not(:disabled) {
+  background: #ffffff;
+  transform: scale(1.06);
+}
+
+.now-timer {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lavender);
+  background: rgba(201, 182, 228, 0.12);
+  padding: 0.25rem 0.75rem;
+  border-radius: 30px;
+}
+
+.now-volume {
+  justify-self: end;
+}
+
+.now-volume .master {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.now-volume .master label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.now-volume .master input {
+  width: 8.5rem;
+}
+
+.now-volume .master button {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.9rem;
 }
 
 /* ---------- Smaller screens ---------- */
 
-@media (max-width: 70rem) {
-  .player {
-    grid-template-columns: minmax(0, 1fr);
+@media (max-width: 78rem) {
+  .app {
+    grid-template-columns: 13rem minmax(0, 1fr) 18.5rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  /* One scrolling column, with the bar pinned to the bottom. */
+  .app {
+    display: block;
+    height: auto;
+    padding: 0 0 8.5rem;
   }
 
-  .player-rail {
-    position: static;
+  .app-side,
+  .app-main,
+  .app-queue {
+    border-radius: 0;
+    overflow: visible;
   }
 
-  .mix-dock {
-    position: sticky;
-    bottom: 1rem;
-    z-index: 5;
-    display: flex;
+  .app-side {
+    flex-direction: row;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.7rem 0.8rem 0.7rem 1.1rem;
-    background: var(--plum);
-    border: 1px solid var(--lilac);
-    border-radius: 30px;
-    color: #ffffff;
-    font-weight: 700;
-    text-decoration: none;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.55);
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.25rem;
   }
 
-  .mix-dock-action {
-    margin-left: auto;
-    padding: 0.3rem 0.9rem;
-    border-radius: 30px;
-    background: var(--lilac);
+  .app-side .brand {
+    padding-left: 0;
+  }
+
+  .app-nav {
+    display: flex;
+  }
+
+  .app-nav a[aria-current='page'] {
+    display: none;
+  }
+
+  .app-side-foot {
+    display: none;
+  }
+
+  .app-main {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .app-queue {
+    margin-top: 0.5rem;
+  }
+
+  .now-bar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 5;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.6rem 1rem;
+    padding: 0.7rem 1rem 0.8rem;
+    background: #0a070d;
+    border-top: 1px solid var(--line);
+  }
+
+  .now-volume {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+
+  .now-volume .master label {
+    flex: 1;
+  }
+
+  .now-volume .master input {
+    width: 100%;
+  }
+
+  .scene-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scene-grid .tile-description {
+    display: none;
+  }
+
+  .scene-grid .tile-button {
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-size: 0.9rem;
+  }
+
+  .scene-grid .tile {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: 0.6rem;
+    padding-right: 0.5rem;
+  }
+
+  .scene-grid .tile-art {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .sound-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -863,36 +1131,10 @@ thead th {
       rgba(21, 14, 26, 0.8);
   }
 
-  .shell-site .site-header {
+  .site-header {
     padding: 0.7rem 1.25rem;
   }
 
-  .shell-player {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .shell-player .site-header {
-    position: static;
-    height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.6rem;
-    padding: 0.8rem 1.25rem;
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-
-  .shell-player .site-nav {
-    flex-direction: row;
-  }
-
-  .shell-player .site-nav a {
-    padding: 0.4rem 0.8rem;
-  }
-
-  .player,
   .page,
   .landing-section {
     padding-left: 1.25rem;
@@ -907,30 +1149,6 @@ thead th {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .tile-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.8rem;
-  }
-
-  /* Scenes become a row to swipe through. */
-  .scene-grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 0.5rem;
-  }
-
-  .scene-grid .tile {
-    flex: 0 0 9.5rem;
-    scroll-snap-align: start;
-  }
-
-  /* Shorter cards on phones. The descriptions stay available to screen
-     readers through aria-describedby. */
-  .tile-description {
-    display: none;
-  }
-
   table {
     display: block;
     overflow-x: auto;
@@ -941,5 +1159,6 @@ thead th {
   * {
     transition: none !important;
     animation: none !important;
+    scroll-behavior: auto !important;
   }
 }

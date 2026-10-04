@@ -3,6 +3,7 @@ import { SCENES, SOUNDS, getSound } from '../catalogue'
 import { Artwork } from '../player/Artwork'
 import { useEngine, useLayers } from '../player/PlayerContext'
 import { SceneList } from '../player/SceneList'
+import { mixTitle } from '../player/nowPlaying'
 
 export function LandingPage() {
   const engine = useEngine()
@@ -14,12 +15,9 @@ export function LandingPage() {
 
   // The mini-player shows whatever is playing; before that, a preview of the featured scene.
   const rows = playing ? layers : featured.layers
-  const playingScene = SCENES.find(
-    (scene) =>
-      scene.layers.length === layers.length &&
-      scene.layers.every((layer) => layers.some((live) => live.soundId === layer.soundId)),
-  )
-  const title = playing ? (playingScene?.name ?? 'Your mix') : featured.name
+  const title = playing ? mixTitle(layers) : featured.name
+  // The player opens in its own tab with its own audio, so this tab goes quiet.
+  const openPlayer = { to: '/play', target: '_blank', rel: 'noopener', onClick: () => engine.stopAll() }
 
   return (
     <main className="landing">
@@ -35,7 +33,7 @@ export function LandingPage() {
               Ambiancy is a free ambient sound mixer. Layer rain, a fireplace or a coffee shop, set each one's volume,
               and share the mix with a link.
             </p>
-            <Link to="/play" className="button-link primary">
+            <Link {...openPlayer} className="button-link primary">
               Open the player
             </Link>
             <p className="hint">Free. No account, nothing to install.</p>
@@ -131,7 +129,7 @@ export function LandingPage() {
             </li>
           ))}
         </ul>
-        <Link to="/play" className="button-link">
+        <Link {...openPlayer} className="button-link">
           Start mixing
         </Link>
       </section>

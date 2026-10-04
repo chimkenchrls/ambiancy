@@ -14,7 +14,20 @@ describe('landing page', () => {
     renderWithEngine(<AppRoutes />, { route: '/' })
 
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Embrace the silence')
-    expect(screen.getByRole('link', { name: 'Open the player' })).toHaveAttribute('href', '/play')
+    const open = screen.getByRole('link', { name: 'Open the player' })
+    expect(open).toHaveAttribute('href', '/play')
+    expect(open).toHaveAttribute('target', '_blank')
+  })
+
+  it('stops the landing page sound when the player is opened in its own tab', async () => {
+    const user = userEvent.setup()
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/' })
+    await user.click(screen.getByRole('button', { name: `Play ${SCENES[0]!.name}` }))
+    await screen.findByRole('button', { name: 'Stop' })
+
+    fireEvent.click(screen.getByRole('link', { name: 'Open the player' }))
+
+    expect(engine.getMix()).toEqual([])
   })
 
   it('plays a scene in place and can stop it', async () => {
@@ -89,12 +102,23 @@ describe('other pages', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Page not found' })).toBeInTheDocument()
   })
 
-  it('keeps the brand and navigation on every page', () => {
+  it('gives the player its own page, without the site navigation', () => {
+    renderWithEngine(<AppRoutes />, { route: '/play' })
+
+    expect(screen.queryByRole('link', { name: 'Open web player' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Scenes' })).toHaveAttribute('href', '#scenes')
+    expect(screen.getByRole('link', { name: 'Sounds' })).toHaveAttribute('href', '#sounds')
+    expect(screen.getByRole('region', { name: 'Now playing' })).toBeInTheDocument()
+  })
+
+  it('keeps the brand and navigation on every site page', () => {
     renderWithEngine(<AppRoutes />, { route: '/licences' })
 
     expect(screen.getByRole('link', { name: 'Ambiancy.' })).toHaveAttribute('href', '/')
-    expect(screen.getByRole('link', { name: 'Player' })).toHaveAttribute('href', '/play')
     expect(screen.getByRole('link', { name: 'Licences' })).toHaveAttribute('href', '/licences')
+    const open = screen.getByRole('link', { name: 'Open web player' })
+    expect(open).toHaveAttribute('href', '/play')
+    expect(open).toHaveAttribute('target', '_blank')
   })
 })
 
@@ -128,19 +152,9 @@ describe('things that outlive one page', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Licences' })).toBeInTheDocument()
 
     act(() => {
-      vi.advanceTimersByTime(5 * 60_000)
-    })
-    fireEvent.click(screen.getByRole('link', { name: 'Player' }))
-    expect(screen.getByRole('timer')).toHaveTextContent('10:00')
-    fireEvent.click(screen.getByRole('link', { name: 'Licences' }))
-
-    act(() => {
-      vi.advanceTimersByTime(10 * 60_000)
+      vi.advanceTimersByTime(15 * 60_000)
     })
     expect(fadeOut).toHaveBeenCalledExactlyOnceWith(30)
-
-    fireEvent.click(screen.getByRole('link', { name: 'Player' }))
-    expect(screen.getByRole('status')).toHaveTextContent('Sleep timer finished')
   })
 
   it('offers to resume when the browser pauses the sound', async () => {

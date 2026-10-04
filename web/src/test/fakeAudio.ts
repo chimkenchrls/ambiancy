@@ -41,6 +41,9 @@ export function createFakeContext() {
     resume: vi.fn(async () => {
       setState('running')
     }),
+    suspend: vi.fn(async () => {
+      setState('suspended')
+    }),
     addEventListener(_type: 'statechange', listener: () => void) {
       stateListeners.push(listener)
     },

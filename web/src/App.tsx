@@ -9,9 +9,9 @@ import { PlayerPage } from './player/PlayerPage'
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="play" element={<PlayerPage />} />
       <Route element={<Layout />}>
         <Route index element={<LandingPage />} />
-        <Route path="play" element={<PlayerPage />} />
         <Route path="mix" element={<SharedMixPage />} />
         <Route path="licences" element={<LicencesPage />} />
         <Route path="*" element={<NotFoundPage />} />
