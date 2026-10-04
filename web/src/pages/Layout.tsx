@@ -1,4 +1,4 @@
-import { Link, NavLink, Outlet } from 'react-router'
+import { Link, Outlet } from 'react-router'
 import { AudioBlockedNotice } from '../player/AudioBlockedNotice'
 import { useEngine } from '../player/PlayerContext'
 
@@ -12,12 +12,6 @@ export function Layout() {
         <Link to="/" className="brand">
           Ambian<span className="brand-accent">cy.</span>
         </Link>
-        <nav aria-label="Main" className="site-nav">
-          <NavLink to="/" end>
-            Home
-          </NavLink>
-          <NavLink to="/licences">Licences</NavLink>
-        </nav>
         {/* Its own tab with its own audio, so this tab goes quiet. */}
         <Link to="/play" target="_blank" rel="noopener" className="button-link primary" onClick={() => engine.stopAll()}>
           Open web player
@@ -25,7 +19,10 @@ export function Layout() {
       </header>
       <AudioBlockedNotice />
       <Outlet />
-      <footer className="site-footer">Ambiancy is a free ambient sound mixer. No account needed.</footer>
+      <footer className="site-footer">
+        <p>Ambiancy is a free ambient sound mixer. No account needed.</p>
+        <Link to="/licences">Licences</Link>
+      </footer>
     </div>
   )
 }

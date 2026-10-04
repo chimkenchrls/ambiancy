@@ -115,7 +115,11 @@ describe('other pages', () => {
     renderWithEngine(<AppRoutes />, { route: '/licences' })
 
     expect(screen.getByRole('link', { name: 'Ambiancy.' })).toHaveAttribute('href', '/')
-    expect(screen.getByRole('link', { name: 'Licences' })).toHaveAttribute('href', '/licences')
+    expect(screen.queryByRole('link', { name: 'Home' })).not.toBeInTheDocument()
+    const footer = within(screen.getByRole('contentinfo'))
+    expect(footer.getByRole('link', { name: 'Licences' })).toHaveAttribute('href', '/licences')
+    const header = within(screen.getByRole('banner'))
+    expect(header.getAllByRole('link')).toHaveLength(2)
     const open = screen.getByRole('link', { name: 'Open web player' })
     expect(open).toHaveAttribute('href', '/play')
     expect(open).toHaveAttribute('target', '_blank')
