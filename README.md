@@ -9,6 +9,7 @@ This repository is also a DevOps portfolio project: the app is small, and the wa
 Requirements: Docker, Node 22, FFmpeg.
 
     ./tools/make-dev-sounds.sh     # generate placeholder sounds into media/
+    node tools/fetch-artwork.mjs   # download the sound pictures into media/
     docker compose up -d --build   # web on http://localhost:8080, media on :8081
 
 For development with hot reload:
@@ -22,4 +23,4 @@ For development with hot reload:
 
 ## Licences
 
-Sounds and their licences are listed in `web/src/catalogue/sounds.json` and on the `/licences` page.
+Sounds and pictures, with their authors and licences, are listed in `web/src/catalogue/sounds.json` and on the `/licences` page. Pictures are from Wikimedia Commons.

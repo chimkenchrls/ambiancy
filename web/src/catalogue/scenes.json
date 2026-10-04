@@ -1,0 +1,50 @@
+[
+  {
+    "id": "rainy-cafe",
+    "name": "Rainy café",
+    "description": "Rain outside, a coffee shop inside.",
+    "layers": [
+      { "soundId": "rain", "volume": 60 },
+      { "soundId": "coffee-shop", "volume": 45 }
+    ]
+  },
+  {
+    "id": "forest-night",
+    "name": "Forest night",
+    "description": "A still forest with cicadas and a light wind.",
+    "layers": [
+      { "soundId": "night-forest", "volume": 70 },
+      { "soundId": "cicadas", "volume": 30 },
+      { "soundId": "wind", "volume": 20 }
+    ]
+  },
+  {
+    "id": "stormy-cabin",
+    "name": "Stormy cabin",
+    "description": "A fire indoors while a storm passes.",
+    "layers": [
+      { "soundId": "thunderstorm", "volume": 60 },
+      { "soundId": "fireplace", "volume": 55 },
+      { "soundId": "rain", "volume": 30 }
+    ]
+  },
+  {
+    "id": "seaside-morning",
+    "name": "Seaside morning",
+    "description": "Waves, birds and a sea breeze.",
+    "layers": [
+      { "soundId": "ocean-waves", "volume": 70 },
+      { "soundId": "birds-chirping", "volume": 35 },
+      { "soundId": "wind", "volume": 15 }
+    ]
+  },
+  {
+    "id": "creekside",
+    "name": "Creekside",
+    "description": "A creek with birdsong overhead.",
+    "layers": [
+      { "soundId": "creek", "volume": 65 },
+      { "soundId": "birds-chirping", "volume": 40 }
+    ]
+  }
+]

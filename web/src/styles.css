@@ -1,0 +1,1408 @@
+/* Ambiancy keeps its original purple palette and Tuffy typeface, on a dark base
+   so the photographs carry the colour. */
+:root {
+  --night: #150e1a;
+  --ink: #1f1527;
+  --plum: #36213e;
+  --purple: #554971;
+  --violet: #6a4e98;
+  --lilac: #8e7ab5;
+  --lavender: #c9b6e4;
+  --mist: #f5f0fa;
+  --muted: #b9aec6;
+  --line: rgba(201, 182, 228, 0.16);
+  --danger: #ffb4a8;
+  --shade: rgba(21, 14, 26, 0.9);
+  color-scheme: dark;
+  font-family: 'Tuffy', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-size: 106.25%;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--night);
+  color: var(--mist);
+}
+
+.shell {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--lavender);
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* ---------- Controls ---------- */
+
+button:where(:not(.tile-button)),
+.button-link,
+select {
+  font: inherit;
+  color: var(--mist);
+  background: rgba(201, 182, 228, 0.1);
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  padding: 0.5rem 1.1rem;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+select {
+  border-radius: 10px;
+  padding: 0.45rem 0.6rem;
+  background: var(--plum);
+}
+
+button:where(:not(.tile-button)):hover:not(:disabled),
+.button-link:hover {
+  background: rgba(201, 182, 228, 0.2);
+  border-color: var(--lilac);
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+button.primary,
+.button-link.primary {
+  background: var(--lilac);
+  border-color: var(--lilac);
+  color: #ffffff;
+  font-weight: 700;
+  padding: 0.75rem 1.7rem;
+  box-shadow: 0 8px 24px rgba(106, 78, 152, 0.45);
+}
+
+button.primary:hover:not(:disabled),
+.button-link.primary:hover {
+  background: var(--violet);
+  border-color: var(--violet);
+}
+
+.icon-button {
+  width: 1.9rem;
+  height: 1.9rem;
+  padding: 0;
+  border-radius: 50%;
+  line-height: 1;
+  font-size: 1.1rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--lavender);
+  outline-offset: 2px;
+}
+
+input[type='range'] {
+  width: 100%;
+  accent-color: var(--lavender);
+}
+
+[role='alert'] {
+  color: var(--danger);
+}
+
+.hint,
+.empty {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.lead {
+  font-size: 1.2rem;
+  color: #e4dcee;
+  max-width: 34rem;
+}
+
+/* Three bars that move while something is playing. */
+.eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 1rem;
+}
+
+.eq i {
+  width: 4px;
+  height: 100%;
+  border-radius: 2px;
+  background: var(--lavender);
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite alternate;
+}
+
+.eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes eq {
+  from {
+    transform: scaleY(0.3);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ---------- Pictures ---------- */
+
+.tile-art {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--plum), var(--purple));
+}
+
+.tile-art img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Shown while a photo loads, and kept if it cannot be loaded. */
+.tile-art[data-art='rain'] {
+  background: linear-gradient(180deg, #2f4552, #6f8b98);
+}
+.tile-art[data-art='wind'] {
+  background: linear-gradient(160deg, #3b2f1c, #b58a3c);
+}
+.tile-art[data-art='creek'] {
+  background: linear-gradient(160deg, #2f4a24, #8a7a2e);
+}
+.tile-art[data-art='cicadas'] {
+  background: linear-gradient(140deg, #3f6a26, #9cc25a);
+}
+.tile-art[data-art='coffee-shop'] {
+  background: linear-gradient(160deg, #5a3a1c, #c9973f);
+}
+.tile-art[data-art='fireplace'] {
+  background: radial-gradient(ellipse at 50% 100%, #ff8a1f, #5a2c22 60%, #2a1512);
+}
+.tile-art[data-art='birds-chirping'] {
+  background: linear-gradient(135deg, #5f7f9c, #c2a57a);
+}
+.tile-art[data-art='ocean-waves'] {
+  background: linear-gradient(180deg, #2d8f8f, #14465f);
+}
+.tile-art[data-art='thunderstorm'] {
+  background: linear-gradient(180deg, #2b2350, #7a5fa8);
+}
+.tile-art[data-art='night-forest'] {
+  background: linear-gradient(180deg, #0f1f45, #24407a);
+}
+
+/* ---------- Site header ---------- */
+
+.brand {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.brand-accent {
+  color: var(--lilac);
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 2rem;
+  background: rgba(21, 14, 26, 0.72);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+.site-header .button-link.primary {
+  padding: 0.5rem 1.2rem;
+  box-shadow: none;
+}
+
+.site-footer {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border-top: 1px solid var(--line);
+}
+
+.site-footer p {
+  margin: 0 0 0.6rem;
+}
+
+.audio-blocked {
+  margin: 1rem 2rem 0;
+  padding: 0.75rem 1rem;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+/* ---------- Landing: hero ---------- */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-backdrop,
+.hero-backdrop .tile-art {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-backdrop {
+  z-index: -1;
+}
+
+/* Darkens the photo towards the text and fades it into the page below. */
+.hero-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, var(--night) 0%, transparent 34%),
+    linear-gradient(90deg, rgba(21, 14, 26, 0.94) 0%, rgba(21, 14, 26, 0.72) 48%, rgba(21, 14, 26, 0.42) 100%);
+}
+
+.hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+  gap: 4rem;
+  align-items: center;
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 7rem 2rem 6.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 5vw, 3.9rem);
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.hero .lead {
+  margin: 1.5rem 0 2rem;
+}
+
+.hero-copy .hint {
+  margin-top: 1rem;
+}
+
+.hero-player {
+  background: rgba(31, 21, 39, 0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 1.5rem;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.hero-player-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.hero-player h2 {
+  font-size: 1.5rem;
+}
+
+.hero-player .hint {
+  margin: 0.3rem 0 0;
+}
+
+.hero-layers {
+  list-style: none;
+  margin: 1.25rem 0 1.4rem;
+  padding: 0;
+  display: grid;
+  gap: 0.8rem;
+}
+
+.hero-layers li {
+  display: grid;
+  grid-template-columns: 2.6rem 6rem minmax(0, 1fr);
+  align-items: center;
+  gap: 0.8rem;
+  font-weight: 700;
+}
+
+.hero-layers .tile-art {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 10px;
+}
+
+/* ---------- Landing: sections ---------- */
+
+.landing-section {
+  max-width: 74rem;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+}
+
+.landing-section h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+  color: #ffffff;
+}
+
+.landing-section > .hint {
+  margin-top: 1rem;
+}
+
+/* Made for: three photo panels, each with a scene to hear. */
+.made-for ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.made-for li {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: 21rem;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.made-for .tile-art {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  transition: transform 0.6s ease;
+}
+
+.made-for li:hover .tile-art {
+  transform: scale(1.05);
+}
+
+.made-for .tile-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--shade) 8%, rgba(21, 14, 26, 0.55) 45%, rgba(21, 14, 26, 0.1) 80%);
+}
+
+.made-for-body {
+  padding: 1.5rem;
+}
+
+.made-for h3 {
+  font-size: 1.8rem;
+}
+
+.made-for p {
+  margin: 0.5rem 0 1.1rem;
+  color: #e4dcee;
+}
+
+.made-for button {
+  background: rgba(21, 14, 26, 0.55);
+  border-color: var(--lavender);
+  backdrop-filter: blur(6px);
+}
+
+/* How it works: a real sequence, so the steps are numbered. */
+.steps ol {
+  list-style: none;
+  counter-reset: step;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.steps li {
+  counter-increment: step;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.5rem;
+}
+
+.steps li::before {
+  content: counter(step);
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  margin-bottom: 1rem;
+  border-radius: 50%;
+  background: var(--lilac);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.steps h3 {
+  font-size: 1.2rem;
+}
+
+.steps p {
+  margin: 0.6rem 0 0;
+  color: #dcd3e7;
+}
+
+.questions details {
+  border-bottom: 1px solid var(--line);
+  max-width: 46rem;
+}
+
+.questions summary {
+  cursor: pointer;
+  padding: 1rem 0;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.questions summary::marker {
+  color: var(--lilac);
+}
+
+.questions details p {
+  margin: 0 0 1.1rem;
+  color: #dcd3e7;
+  max-width: 40rem;
+}
+
+.about p {
+  max-width: 44rem;
+  color: #dcd3e7;
+  margin: 0 0 1rem;
+}
+
+.about .button-link {
+  margin-top: 0.5rem;
+}
+
+.closing {
+  text-align: center;
+  padding: 5rem 2rem 5.5rem;
+  background: radial-gradient(ellipse 60% 100% at 50% 100%, rgba(106, 78, 152, 0.4), transparent);
+}
+
+.closing h2 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  margin-bottom: 1.75rem;
+  color: #ffffff;
+}
+
+/* ---------- Motion ---------- */
+
+/* One entrance when the page loads: the hero's pieces rise in turn. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+.hero-copy > *,
+.hero-player {
+  animation: rise 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+}
+
+.hero-copy > :nth-child(2) {
+  animation-delay: 0.12s;
+}
+
+.hero-copy > :nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.hero-copy > :nth-child(4) {
+  animation-delay: 0.34s;
+}
+
+.hero-player {
+  animation-delay: 0.45s;
+}
+
+/* The backdrop photo drifts slowly, once. */
+@keyframes drift {
+  from {
+    transform: scale(1.12);
+  }
+}
+
+.hero-backdrop .tile-art img {
+  animation: drift 18s ease-out backwards;
+}
+
+/* Sections fade up the first time they scroll into view. */
+.reveal-ready .reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal-ready .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+.gallery ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.gallery li {
+  position: relative;
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+}
+
+.gallery .tile-art {
+  position: absolute;
+  inset: 0;
+}
+
+.gallery li span {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 1.6rem 0.8rem 0.6rem;
+  font-weight: 700;
+  background: linear-gradient(0deg, var(--shade), transparent);
+}
+
+/* ---------- Plain pages (licences, shared mix, not found) ---------- */
+
+.page {
+  max-width: 62rem;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 3rem;
+}
+
+.page h1 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.page h2 {
+  font-size: 1.3rem;
+  margin: 2.5rem 0 0.9rem;
+  color: var(--lavender);
+}
+
+.shared-mix {
+  list-style: none;
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.5rem;
+  background: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  max-width: 24rem;
+}
+
+.shared-mix li {
+  padding: 0.5rem 0;
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  background: var(--ink);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+thead th {
+  background: var(--plum);
+}
+
+/* ---------- Cards shared by the site and the player ---------- */
+
+.tile-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.tile {
+  position: relative;
+  transition: background-color 0.18s;
+}
+
+.tile-button {
+  font: inherit;
+  font-weight: 700;
+  color: #ffffff;
+  background: none;
+  border: 0;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+/* The name is the button; this stretches its click area over the whole card. */
+.tile-button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.tile-button:focus-visible {
+  outline: none;
+}
+
+.tile:has(.tile-button:focus-visible) {
+  outline: 3px solid var(--lavender);
+  outline-offset: 2px;
+}
+
+.tile-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.tile:has(:disabled) {
+  opacity: 0.4;
+}
+
+.tile:has(:disabled) .tile-button {
+  cursor: not-allowed;
+}
+
+/* Scenes: compact tiles, a square picture with the name beside it. */
+.scene-grid {
+  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+  gap: 0.6rem;
+}
+
+.scene-grid .tile {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.9rem;
+  padding-right: 0.9rem;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.scene-grid .tile:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.scene-grid .tile-art {
+  grid-row: 1 / span 2;
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+.scene-grid .tile-button {
+  align-self: end;
+}
+
+.scene-grid .tile-description {
+  align-self: start;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sounds: a square picture, the name and a line of description under it. */
+.sound-grid {
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+  gap: 0.4rem;
+}
+
+.sound-grid .tile {
+  padding: 0.8rem;
+  border-radius: 10px;
+}
+
+.sound-grid .tile:hover:not(:has(:disabled)) {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.sound-grid .tile-art {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.sound-grid .tile-button {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.sound-grid .tile-description {
+  margin-top: 0.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The round button on the picture: appears on hover, stays while playing. */
+.sound-grid .tile-art::after {
+  content: '';
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--lavender)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23150e1a' d='M8.5 5.5v13l10.5-6.5z'/%3E%3C/svg%3E")
+    center / 1.5rem no-repeat;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.18s, transform 0.18s;
+}
+
+.sound-grid .tile:hover:not(:has(:disabled)) .tile-art::after,
+.sound-grid .tile:has(.tile-button:focus-visible) .tile-art::after,
+.sound-grid .tile:has([aria-pressed='true']) .tile-art::after {
+  opacity: 1;
+  transform: none;
+}
+
+.sound-grid .tile:has([aria-pressed='true']) .tile-art::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23150e1a' d='M7 5.5h3.5v13H7zM13.5 5.5H17v13h-3.5z'/%3E%3C/svg%3E");
+}
+
+.sound-grid .tile:has([aria-pressed='true']) {
+  background: rgba(201, 182, 228, 0.12);
+}
+
+.tile-button[aria-pressed='true'] {
+  color: var(--lavender);
+}
+
+/* ---------- Player: three panels and a bar, on black ---------- */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.app {
+  --panel: #1a1220;
+  display: grid;
+  grid-template-columns: 14.5rem minmax(0, 1fr) 21rem;
+  grid-template-rows: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'side main queue'
+    'bar bar bar';
+  gap: 0.5rem;
+  height: 100vh;
+  padding: 0.5rem 0.5rem 0;
+  background: #0a070d;
+}
+
+.app-side,
+.app-main,
+.app-queue {
+  background: var(--panel);
+  border-radius: 12px;
+}
+
+.app-side {
+  grid-area: side;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.4rem 0.9rem 1.1rem;
+  overflow-y: auto;
+}
+
+.app-side .brand {
+  padding-left: 0.75rem;
+}
+
+.app-nav {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.app-nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--muted);
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  transition: color 0.18s, background-color 0.18s;
+}
+
+.app-nav a:hover {
+  color: #ffffff;
+}
+
+.app-nav a[aria-current='page'] {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.app-nav svg {
+  fill: currentColor;
+  flex: none;
+}
+
+/* The sidebar's library: scenes as rows with a picture, like a list of playlists. */
+.library {
+  border-top: 1px solid var(--line);
+  padding-top: 1.25rem;
+}
+
+.library h2 {
+  font-size: 0.95rem;
+  color: var(--muted);
+  padding-left: 0.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.library ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.library-item {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 2.9rem minmax(0, 1fr);
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.45rem 0.6rem;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  text-align: left;
+}
+
+.library-item .tile-art {
+  grid-row: 1 / span 2;
+  width: 2.9rem;
+  height: 2.9rem;
+  border-radius: 6px;
+}
+
+.library-name {
+  align-self: end;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.library-sub {
+  align-self: start;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.library-sub .eq {
+  height: 0.7rem;
+}
+
+.library-sub .eq i {
+  width: 3px;
+}
+
+.library-item[aria-pressed='true'] {
+  background: rgba(201, 182, 228, 0.1);
+}
+
+.library-item[aria-pressed='true'] .library-name {
+  color: var(--lavender);
+}
+
+.app-side-foot {
+  margin-top: auto;
+  display: grid;
+  gap: 0.45rem;
+  padding-left: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.app-side-foot a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.app-side-foot a:hover {
+  color: #ffffff;
+}
+
+/* The purple wash at the top scrolls away with the content. */
+.app-main {
+  grid-area: main;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  padding: 1.5rem 1.5rem 2.5rem;
+  background: linear-gradient(180deg, #4b3574 0, var(--panel) 19rem) local;
+}
+
+.app-main .audio-blocked {
+  margin: 0 0 1rem;
+}
+
+.greeting {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0.4rem 0 1.4rem;
+}
+
+.app-main h2 {
+  font-size: 1.4rem;
+  margin: 2.25rem 0 1rem;
+  scroll-margin-top: 1rem;
+}
+
+.app-main section:first-of-type h2 {
+  margin-top: 0;
+}
+
+.app-main .sound-grid {
+  margin: 0 -0.8rem;
+}
+
+.app-queue {
+  grid-area: queue;
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: grid;
+  align-content: start;
+  gap: 1.5rem;
+}
+
+.app-queue h2 {
+  font-size: 1.05rem;
+  margin-bottom: 0.6rem;
+}
+
+.app-queue > section + section {
+  border-top: 1px solid var(--line);
+  padding-top: 1.4rem;
+}
+
+/* ---------- Your mix ---------- */
+
+.layer-list {
+  list-style: none;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.layer {
+  display: grid;
+  grid-template-columns: 2.75rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.3rem 0.75rem;
+  padding: 0.7rem 0;
+}
+
+.layer .tile-art {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 6px;
+}
+
+.layer-name {
+  grid-column: 2;
+  grid-row: 1;
+  font-weight: 700;
+}
+
+.layer .icon-button {
+  grid-column: 3;
+  grid-row: 1;
+  background: none;
+  border-color: transparent;
+  color: var(--muted);
+}
+
+.layer input[type='range'] {
+  grid-column: 2 / -1;
+  grid-row: 2;
+}
+
+.layer [role='status'],
+.layer [role='alert'] {
+  grid-column: 2 / -1;
+  grid-row: 3;
+  font-size: 0.85rem;
+}
+
+.share input {
+  width: 100%;
+  margin-top: 0.4rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--mist);
+  background: var(--plum);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+}
+
+.timer-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.timer-form label,
+.master label {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.timer-form button {
+  grid-column: 1 / -1;
+}
+
+[role='timer'] {
+  font-size: 1.7rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Now-playing bar ---------- */
+
+.now-bar {
+  grid-area: bar;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding: 0.7rem 1rem 0.9rem;
+}
+
+.now-info {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.now-thumbs {
+  display: flex;
+}
+
+.now-thumbs .tile-art {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 8px;
+  border: 2px solid #0a070d;
+}
+
+.now-thumbs .tile-art + .tile-art {
+  margin-left: -1.6rem;
+}
+
+.now-text p {
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.now-title {
+  font-weight: 700;
+}
+
+.now-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.now-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.play-button {
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0a070d;
+  display: grid;
+  place-items: center;
+  transition: transform 0.15s;
+}
+
+.play-button svg {
+  fill: currentColor;
+}
+
+.play-button:hover:not(:disabled) {
+  background: #ffffff;
+  transform: scale(1.06);
+}
+
+.now-timer {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--lavender);
+  background: rgba(201, 182, 228, 0.12);
+  padding: 0.25rem 0.75rem;
+  border-radius: 30px;
+}
+
+.now-volume {
+  justify-self: end;
+}
+
+.now-volume .master {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.now-volume .master label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.now-volume .master input {
+  width: 8.5rem;
+}
+
+.now-volume .master button {
+  font-size: 0.85rem;
+  padding: 0.35rem 0.9rem;
+}
+
+/* ---------- Smaller screens ---------- */
+
+@media (max-width: 78rem) {
+  .app {
+    grid-template-columns: 13rem minmax(0, 1fr) 18.5rem;
+  }
+}
+
+@media (max-width: 60rem) {
+  /* One scrolling column, with the bar pinned to the bottom. */
+  .app {
+    display: block;
+    height: auto;
+    padding: 0 0 8.5rem;
+  }
+
+  .app-side,
+  .app-main,
+  .app-queue {
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .app-side {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.8rem 1.25rem;
+  }
+
+  .app-side .brand {
+    padding-left: 0;
+  }
+
+  .app-nav {
+    display: flex;
+  }
+
+  .app-nav a[aria-current='page'] {
+    display: none;
+  }
+
+  .app-side-foot,
+  .library,
+  .app-nav svg {
+    display: none;
+  }
+
+  .app-main {
+    padding: 1.25rem 1.25rem 1.5rem;
+  }
+
+  .app-queue {
+    margin-top: 0.5rem;
+  }
+
+  .now-bar {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 5;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.6rem 1rem;
+    padding: 0.7rem 1rem 0.8rem;
+    background: #0a070d;
+    border-top: 1px solid var(--line);
+  }
+
+  .now-volume {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+
+  .now-volume .master label {
+    flex: 1;
+  }
+
+  .now-volume .master input {
+    width: 100%;
+  }
+
+  .scene-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scene-grid .tile-description {
+    display: none;
+  }
+
+  .scene-grid .tile-button {
+    grid-row: 1 / span 2;
+    align-self: center;
+    font-size: 0.9rem;
+  }
+
+  .scene-grid .tile {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    column-gap: 0.6rem;
+    padding-right: 0.5rem;
+  }
+
+  .scene-grid .tile-art {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .sound-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 54rem) {
+  .hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    padding: 3.5rem 1.25rem 3.5rem;
+  }
+
+  .hero-backdrop::after {
+    background:
+      linear-gradient(0deg, var(--night) 0%, transparent 30%),
+      rgba(21, 14, 26, 0.8);
+  }
+
+  .site-header {
+    padding: 0.7rem 1.25rem;
+  }
+
+  .page,
+  .landing-section {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .made-for ul,
+  .steps ol {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .made-for li {
+    min-height: 16rem;
+  }
+
+  .gallery ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal-ready .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

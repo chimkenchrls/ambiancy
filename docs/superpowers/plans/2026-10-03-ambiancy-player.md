@@ -37,7 +37,6 @@ Deliberately left for later plans: `/gallery`, `/me`, `/status`, `/terms`, `/pri
 - The UI calls the audio engine only through the `AudioEngine` interface.
 - Node 22 and npm. No other package manager.
 - This machine runs Fedora with SELinux enforcing: every Docker bind mount needs the `z` option.
-- Every commit message ends with the trailer `Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>`.
 - Task 1 commits to `main`. Tasks 2 to 10 commit to the branch `feat/player`.
 - Renaming the old GitHub repo, creating the new one, pushing and opening the pull request are outward-facing: confirm with the owner at each of those steps before running them.
 
@@ -321,8 +320,7 @@ Expected: `1 passed`, then a `dist/` folder and `✓ built`.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add .
-git commit -m "chore: new repository with web tooling and design docs" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "chore: new repository with web tooling and design docs"
 ```
 
 - [ ] **Step 15: Publish to GitHub (confirm with the owner first)**
@@ -756,8 +754,7 @@ Expected: PASS, all tests, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/mix web/src/catalogue
-git commit -m "feat: mix rules and the sound and scene catalogue" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: mix rules and the sound and scene catalogue"
 ```
 
 ---
@@ -911,8 +908,7 @@ Expected: PASS, 13 tests, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/mix
-git commit -m "feat: encode and decode a mix in a share link" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: encode and decode a mix in a share link"
 ```
 
 ---
@@ -1564,8 +1560,7 @@ Expected: PASS, 20 tests, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/audio web/src/test/fakeAudio.ts
-git commit -m "feat: audio engine with layers, volumes and fade-out" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: audio engine with layers, volumes and fade-out"
 ```
 
 ---
@@ -1710,8 +1705,7 @@ Expected: no type errors, all tests pass.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/audio
-git commit -m "feat: audio download cache and browser engine wiring" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: audio download cache and browser engine wiring"
 ```
 
 ---
@@ -1947,8 +1941,7 @@ Expected: PASS, 7 tests, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/timer
-git commit -m "feat: sleep and focus timer that finishes by the clock" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: sleep and focus timer that finishes by the clock"
 ```
 
 ---
@@ -2336,8 +2329,7 @@ Expected: PASS, 9 tests, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/player web/src/test/renderWithEngine.tsx
-git commit -m "feat: mixer components for sounds, scenes, layers and master volume" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: mixer components for sounds, scenes, layers and master volume"
 ```
 
 ---
@@ -2682,8 +2674,7 @@ Expected: all tests pass, no type errors.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src/player
-git commit -m "feat: timer control, share button and the player page" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: timer control, share button and the player page"
 ```
 
 ---
@@ -3278,8 +3269,7 @@ Expected: all tests pass, no type errors, `✓ built`.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add web/src
-git commit -m "feat: landing page, shared mix page, licences page, routing and styles" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: landing page, shared mix page, licences page, routing and styles"
 ```
 
 ---
@@ -3548,8 +3538,7 @@ Expected: containers removed, all tests pass, `✓ built`.
 ```bash
 cd /mnt/heavy-data/ambiancy-v2
 git add tools deploy compose.yaml web/Dockerfile web/nginx.conf web/.dockerignore docs/stages
-git commit -m "feat: placeholder sounds, container image and local Compose stack" \
-  -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+git commit -m "feat: placeholder sounds, container image and local Compose stack"
 ```
 
 - [ ] **Step 15: Push and open a pull request (confirm with the owner first)**
@@ -3580,8 +3569,6 @@ Then follow the browser checklist in the plan, Task 10 Step 11.
 ## Not in this change
 
 Accounts, saved mixes, gallery, offline support, CI. See the plan table in `docs/superpowers/plans/2026-10-03-ambiancy-player.md`.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
 EOF
 )"
 ```
