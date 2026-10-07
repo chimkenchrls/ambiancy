@@ -1,0 +1,10 @@
+{
+  "build": {
+    "env": {
+      "VITE_MEDIA_BASE_URL": "/media"
+    }
+  },
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

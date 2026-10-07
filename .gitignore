@@ -7,3 +7,4 @@ media/
 !.env.example
 *.log
 .DS_Store
+!web/public/media/
