@@ -8,3 +8,5 @@ media/
 *.log
 .DS_Store
 !web/public/media/
+.playwright-cli/
+output/playwright/

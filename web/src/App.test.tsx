@@ -10,6 +10,30 @@ afterEach(() => {
 })
 
 describe('landing page', () => {
+  it('previews an atmosphere silently, then plays and switches the chosen scene', async () => {
+    const user = userEvent.setup()
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/' })
+    const picker = within(screen.getByRole('group', { name: 'Preview an atmosphere' }))
+    await user.click(picker.getByRole('button', { name: 'Forest' }))
+    expect(engine.getMix()).toEqual([])
+    expect(picker.getByRole('button', { name: 'Forest' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'Play Forest night' }))
+    expect(engine.getMix()).toEqual(SCENES.find((scene) => scene.id === 'forest-night')!.layers)
+    await user.click(picker.getByRole('button', { name: 'Sea' }))
+    expect(engine.getMix()).toEqual(SCENES.find((scene) => scene.id === 'seaside-morning')!.layers)
+  })
+
+  it('pauses the weather independently of sound playback', async () => {
+    const user = userEvent.setup()
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/' })
+    await user.click(screen.getByRole('button', { name: 'Play Rainy café' }))
+    await user.click(screen.getByRole('button', { name: 'Pause motion' }))
+    expect(document.querySelector('.living-hero')).toHaveAttribute('data-motion', 'paused')
+    expect(engine.getMix()).toEqual(SCENES[0]!.layers)
+    await user.click(screen.getByRole('button', { name: 'Resume motion' }))
+    expect(document.querySelector('.living-hero')).toHaveAttribute('data-motion', 'running')
+  })
+
   it('introduces the product and links to the player', () => {
     renderWithEngine(<AppRoutes />, { route: '/' })
 

@@ -1,0 +1,287 @@
+/* The existing identity, composed around a single traveling sound sculpture. */
+.landing-story {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  --section-space: clamp(4.5rem, 9vw, 8rem);
+  --content-width: 78rem;
+  background: radial-gradient(ellipse at 0% 39%, #36213e55, transparent 27%),
+    radial-gradient(ellipse at 100% 70%, #55497133, transparent 22%), var(--night);
+}
+.sound-journey {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 600px;
+  height: 600px;
+  pointer-events: none;
+  z-index: 1;
+  transform-origin: center;
+}
+.landing-story .landing-section,
+.landing-story .closing { position: relative; z-index: 2; }
+.landing-story .landing-section {
+  max-width: var(--content-width);
+  padding: var(--section-space) clamp(1.25rem, 4vw, 3rem);
+}
+.landing-story h1, .landing-story h2, .landing-story h3 { text-wrap: balance; }
+.landing-story .landing-section h2 {
+  font-size: clamp(2.1rem, 4vw, 3.8rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  margin-bottom: 2rem;
+}
+.landing-story p { line-height: 1.65; }
+.landing-story button, .landing-story .button-link { min-height: 44px; }
+.landing-story button.primary, .landing-story .button-link.primary {
+  color: var(--night);
+  background: var(--lavender);
+  border-color: transparent;
+  box-shadow: none;
+  transition: background 180ms, transform 250ms cubic-bezier(0.16,1,0.3,1);
+}
+.landing-story button.primary:hover, .landing-story .button-link.primary:hover {
+  background: var(--mist);
+  transform: translateY(-2px);
+}
+.landing-story button.primary:active, .landing-story .button-link.primary:active { transform: translateY(0); }
+.landing-story :is(h2, section[id]) { scroll-margin-top: 6rem; }
+.landing-story .living-hero {
+  isolation: auto;
+  min-height: min(940px, calc(100svh - 70px));
+  overflow: visible;
+}
+.landing-story .hero-backdrop { z-index: 0; opacity: 0.38; overflow: hidden; }
+.landing-story .hero-backdrop::after {
+  background: linear-gradient(0deg, var(--night), transparent 70%),
+    linear-gradient(90deg, var(--night) 8%, #150e1a8f 52%, #150e1a77);
+}
+.landing-story .hero-backdrop .tile-art img { animation: none; }
+.landing-story .hero-inner {
+  grid-template-columns: 1.08fr 1fr;
+  max-width: var(--content-width);
+  padding: 2rem clamp(1.25rem, 4vw, 3rem) 1.5rem;
+  gap: clamp(2rem, 5vw, 5rem);
+  z-index: auto;
+}
+.landing-story .hero-copy { position: relative; z-index: 2; padding-top: 1rem; }
+.landing-story .hero h1 { font-size: clamp(3.1rem, 5.8vw, 5.4rem); max-width: 12ch; }
+.landing-story .hero .lead { font-size: 1.08rem; max-width: 38ch; margin: 1.7rem 0 2rem; }
+.landing-story .hero-copy .hint { margin-top: 1.2rem; }
+.hero-product { min-width: 0; }
+.hero-orb-slot { height: clamp(240px, 26vw, 350px); }
+.landing-story .hero-player {
+  position: relative;
+  z-index: 2;
+  max-width: 27rem;
+  margin: -1rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  background: #1f1527ed;
+  backdrop-filter: none;
+  box-shadow: 0 18px 45px #08040c66;
+}
+.landing-story .hero-scene-picker { margin-bottom: 1.2rem; padding-bottom: 0.75rem; }
+.landing-story .hero-player h2 { font-size: 1.5rem; }
+.landing-story .hero-layers { margin: 1rem 0 1.2rem; }
+.landing-story .hero-layers li { grid-template-columns: 2.3rem 5.6rem minmax(0,1fr); gap: 0.6rem; font-size: 0.87rem; }
+.landing-story .hero-layers .tile-art { width: 2.3rem; height: 2.3rem; border-radius: 8px; }
+.landing-story .hero-play-row .primary { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+.landing-story .hero-bottom { max-width: var(--content-width); padding: 2rem clamp(1.25rem, 4vw, 3rem); z-index: 4; }
+.landing-story .hero-explore svg { transition: transform 250ms; }
+.landing-story .hero-explore:hover svg { transform: translateY(4px); }
+/* The film bridges the hero and the photographic listening moments. */
+.landing-story .film {
+  display: grid;
+  grid-template-columns: 0.72fr 1.28fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+.landing-story .film-intro { align-self: start; padding-top: 1rem; }
+.landing-story .film h2 { max-width: 9ch; margin-bottom: 1rem; }
+.landing-story .film-frame { border: none; border-radius: 12px; box-shadow: 0 24px 60px #09050e66; }
+.landing-story .film > [role='alert'] { grid-column: 2; }
+.section-intro { display: flex; align-items: baseline; justify-content: space-between; gap: 2rem; }
+.section-index { color: var(--muted); margin: 0; font-size: 1rem; }
+.landing-story .made-for { padding-bottom: 4rem; }
+.landing-story .made-for ul { align-items: start; gap: 1.5rem; padding-top: 1rem; }
+.landing-story .made-for li { min-height: 28rem; border: none; border-radius: 12px; }
+.landing-story .made-for li:nth-child(2) { margin-top: 4rem; }
+.landing-story .made-for li:nth-child(3) { margin-top: 8rem; }
+.landing-story .made-for h3 { font-size: clamp(2rem,3vw,3rem); }
+.landing-story .made-for-body { padding: 1.6rem; }
+.landing-story .made-for p { font-size: 0.95rem; }
+.landing-story .made-for .tile-art::after { background: linear-gradient(0deg,#150e1af5, #150e1a88 55%, #150e1a11); }
+.landing-story .made-for button { background: #150e1a88; backdrop-filter: none; }
+/* Ready-made scenes read as a photographic collection, not player tiles. */
+.landing-story .scene-section { padding-top: 3rem; }
+.landing-story .scene-grid { grid-template-columns: repeat(5,minmax(0,1fr)); gap: 1rem; }
+.landing-story .scene-grid .tile {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0 0 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  gap: 0;
+  overflow: visible;
+}
+.landing-story .scene-grid .tile-art { position: relative; width: 100%; height: auto; aspect-ratio: 4/5; border-radius: 12px; margin-bottom: 1rem; }
+.landing-story .scene-grid .tile-art img { transition: transform 600ms cubic-bezier(0.16,1,0.3,1); }
+.landing-story .scene-grid .tile:hover .tile-art img { transform: scale(1.06); }
+.landing-story .scene-grid .tile-button { font-size: 1.02rem; padding: 0; min-height: 44px; text-align: left; }
+.landing-story .scene-grid .tile-description { display: block; color: var(--muted); margin-top: 0.25rem; font-size: 0.84rem; }
+.landing-story .scene-section > .hint { margin: 1.2rem 0 0; max-width: 50ch; }
+/* Open steps leave room for the sphere to unfold into sound waves. */
+.landing-story .steps { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; padding-top: 6rem; }
+.steps-intro { position: sticky; top: 7rem; align-self: start; }
+.landing-story .steps h2 { max-width: 8ch; }
+.waveform-space { height: 18rem; }
+.landing-story .steps ol { display: block; }
+.landing-story .steps li { background: none; border: none; border-radius: 0; padding: 2.2rem 0 2.6rem 3rem; position: relative; border-top: 1px solid var(--line); }
+.landing-story .steps li::before { position: absolute; left: 0; top: 2.2rem; background: none; color: var(--lavender); width: auto; height: auto; font-size: 1rem; }
+.landing-story .steps h3 { font-size: 1.5rem; }
+.landing-story .steps p { max-width: 36ch; color: var(--muted); }
+/* A staggered contact sheet lets the sounds become the visual texture. */
+.landing-story .gallery { padding-top: 3rem; }
+.landing-story .gallery h2 { margin-bottom: 3rem; }
+.landing-story .gallery ul { gap: 1rem; padding-bottom: 3rem; }
+.landing-story .gallery li { aspect-ratio: 0.82; border-radius: 10px; }
+.landing-story .gallery li:nth-child(even) { translate: 0 2rem; }
+.landing-story .gallery .tile-art img { transition: transform 650ms cubic-bezier(0.16,1,0.3,1); }
+.landing-story .gallery li:hover img { transform: scale(1.08); }
+.landing-story .gallery li span { padding: 3rem 1rem 1rem; font-size: 0.92rem; background: linear-gradient(0deg,#150e1af2,transparent); }
+.landing-story .questions { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 5rem; }
+.landing-story .questions h2 { position: sticky; top: 7rem; align-self: start; }
+.landing-story .questions details { max-width: none; }
+.landing-story .questions summary { padding: 1.5rem 0; font-size: 1.15rem; font-weight: 400; list-style: none; display: flex; justify-content: space-between; gap: 1rem; }
+.landing-story .questions summary::-webkit-details-marker { display: none; }
+.landing-story .questions summary::after { content: '+'; color: var(--lavender); font-size: 1.35rem; }
+.landing-story .questions details[open] summary::after { content: '−'; }
+.landing-story .questions details[open] summary { color: var(--lavender); }
+.landing-story .questions details p { font-size: 0.95rem; padding-right: 2rem; }
+.landing-story .about { display: grid; grid-template-columns: 0.8fr 1.2fr; gap: 5rem; padding-top: 3rem; }
+.landing-story .about h2 { max-width: 9ch; }
+.landing-story .about p { font-size: 0.98rem; }
+.landing-story .about .button-link { margin-top: 1rem; }
+.landing-story .closing { min-height: 42rem; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; padding: 9rem 1.25rem; }
+.landing-story .closing h2 { font-size: clamp(2.8rem,5.5vw,5rem); max-width: 12ch; letter-spacing: -0.03em; text-shadow: 0 4px 25px var(--night); }
+.landing-story .closing .primary { margin-top: 0.5rem; }
+@media (min-width: 1500px) { .landing-story .hero-inner { padding-top: 3rem; } }
+@media (max-width: 1050px) and (min-width: 701px) {
+  .landing-story .hero-inner { gap: 2rem; grid-template-columns: 1fr 1fr; }
+  .landing-story .hero h1 { font-size: 3.5rem; }
+  .landing-story .hero-player { padding: 1rem; }
+  .landing-story .hero-orb-slot { height: 280px; }
+  .landing-story .made-for li { min-height: 26rem; }
+  .landing-story .made-for-body { padding: 1rem; }
+  .landing-story .steps, .landing-story .questions, .landing-story .about { gap: 3rem; }
+  .landing-story .scene-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (max-width: 700px) {
+  .landing-story { --section-space: 4rem; }
+  .landing-story .living-hero { min-height: auto; }
+  .landing-story .hero-inner { display: flex; flex-direction: column; gap: 0; padding-top: 2.5rem; }
+  .landing-story .hero-copy { padding-top: 0; width: 100%; }
+  .landing-story .hero h1 { font-size: clamp(2.6rem,10.2vw,4rem); max-width: 14ch; }
+  .landing-story .hero .lead { font-size: 1rem; margin-top: 1.25rem; max-width: 42ch; }
+  .landing-story .hero-product { width: 100%; }
+  .landing-story .hero-orb-slot { height: 260px; }
+  .landing-story .hero-player { margin-top: -0.5rem; max-width: none; padding: 1.25rem; }
+  .landing-story .hero-bottom { padding-top: 1rem; }
+  .landing-story .hero-explore { font-size: 0.8rem; }
+  .landing-story .hero-bottom .atmosphere-toggle { font-size: 0.75rem; }
+  .landing-story .film { grid-template-columns: 1fr; gap: 1rem; padding-top: 3rem; padding-bottom: 2rem; }
+  .landing-story .film h2 { max-width: 13ch; font-size: 2.2rem; }
+  .landing-story .film-intro { padding: 0; }
+  .landing-story .film-intro .hint { margin-bottom: 0; }
+  .landing-story .film > [role='alert'] { grid-column: 1; }
+  .section-intro { display: block; margin-bottom: 1.5rem; }
+  .landing-story .section-intro h2 { margin-bottom: 0.5rem; }
+  .landing-story .made-for ul { display: block; padding-top: 0; }
+  .landing-story .made-for li { min-height: 24rem; margin-top: 1.25rem; }
+  .landing-story .made-for li:nth-child(2) { margin: 1.25rem 0 0 2rem; }
+  .landing-story .made-for li:nth-child(3) { margin: 1.25rem 2rem 0 0; }
+  .landing-story .made-for-body { padding: 1.5rem; }
+  .landing-story .made-for p { max-width: 29ch; }
+  .landing-story .scene-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1.25rem; }
+  .landing-story .scene-grid .tile-art { aspect-ratio: 1; }
+  .landing-story .scene-grid .tile-button { font-size: 1rem; }
+  .landing-story .scene-grid .tile-description { font-size: 0.83rem; }
+  .landing-story .steps { grid-template-columns: 1fr; gap: 0; padding-top: 3rem; }
+  .steps-intro { position: static; }
+  .landing-story .steps h2 { max-width: none; }
+  .waveform-space { display: none; }
+  .landing-story .steps li { padding: 1.7rem 0 2rem 2.5rem; }
+  .landing-story .steps li::before { top: 1.7rem; }
+  .landing-story .steps h3 { font-size: 1.4rem; }
+  .landing-story .gallery ul { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 1rem; }
+  .landing-story .gallery li { aspect-ratio: 0.95; }
+  .landing-story .gallery li:nth-child(even) { translate: 0 1.5rem; }
+  .landing-story .questions, .landing-story .about { grid-template-columns: 1fr; gap: 0.5rem; }
+  .landing-story .questions h2 { position: static; }
+  .landing-story .questions summary { font-size: 1.05rem; }
+  .landing-story .about h2 { max-width: none; }
+  .landing-story .closing { min-height: 34rem; padding-top: 7rem; padding-bottom: 7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .landing-story .hero-orb-slot { opacity: 1; }
+  .landing-story * { scroll-behavior: auto; }
+}
+.shell-story .site-header { padding: 1rem max(1.25rem, calc((100vw - 72rem) / 2)); background: #150e1aeb; backdrop-filter: blur(12px); }
+.shell-story .site-header .primary { background: var(--lavender); color: var(--night); border-color: transparent; font-size: 0.9rem; }
+.landing-nav { display: flex; gap: 2rem; align-items: center; }
+.landing-nav a { color: var(--muted); text-decoration: none; font-size: 0.85rem; padding: 0.5rem 0; transition: color 180ms; }
+.landing-nav a:hover { color: var(--mist); }
+.landing-story .scene-grid .tile-button { align-self: stretch; }
+.landing-story .scene-grid .tile-description { white-space: normal; overflow: visible; }
+.landing-story .scene-grid .tile:hover { background: transparent; }
+@media (max-width: 900px) { .landing-nav { display: none; } }
+@media (max-width: 400px) { .shell-story .site-header .primary { font-size: 0.8rem; padding: 0.5rem 0.9rem; } }
+.landing-story .hero-bottom .atmosphere-toggle {
+  position: fixed;
+  right: max(1.25rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 5;
+  background: #1f1527f2;
+  border-color: #c9b6e44d;
+}
+.landing-story [data-motion='paused'] .eq i { animation-play-state: paused; }
+.landing-story[data-paused='true'] * { animation-play-state: paused; }
+@media (prefers-reduced-motion: reduce) {
+  .landing-story .hero-bottom .atmosphere-toggle { display: none; }
+}
+/* Words keep their natural wrapping; only the inner glyphs move through the mask. */
+.motion-word {
+  display: inline-block;
+  overflow: clip;
+  vertical-align: bottom;
+  padding-bottom: 0.12em;
+  margin-bottom: -0.12em;
+}
+.motion-word-text { display: inline-block; }
+/* GSAP now owns the coordinated entrance, avoiding competing CSS transforms. */
+.landing-story .hero-copy > *, .landing-story .hero-player { animation: none; }
+.landing-story .questions details[open] p { animation: answer-arrive 240ms ease-out both; }
+@keyframes answer-arrive {
+  from { opacity: 0.45; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+/* Pausing reveals the complete content immediately, including newly opened answers. */
+.landing-story[data-paused='true'] .questions details[open] p { animation: none; }
+.landing-header-actions { display: flex; align-items: center; gap: 0.75rem; }
+button.journey-motion-toggle { display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; font-size: 0.78rem; white-space: nowrap; }
+.journey-motion-toggle svg { width: 18px; height: 18px; flex-shrink: 0; }
+@media (max-width: 1100px) {
+  button.journey-motion-toggle { padding: 0; width: 44px; height: 44px; justify-content: center; }
+  .motion-toggle-label { display: none; }
+}
+@media (max-width: 400px) {
+  .shell-story .site-header { gap: 0.5rem; padding-inline: 1rem; }
+  .shell-story .brand { font-size: 1.3rem; }
+  .landing-header-actions { gap: 0.4rem; }
+}
+@media (prefers-reduced-motion: reduce) { .journey-motion-toggle { display: none !important; } }

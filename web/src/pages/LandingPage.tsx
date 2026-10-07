@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router'
 import { SCENES, SOUNDS, getSound } from '../catalogue'
 import { Artwork } from '../player/Artwork'
@@ -6,6 +6,9 @@ import { useEngine, useLayers } from '../player/PlayerContext'
 import { SceneList } from '../player/SceneList'
 import { mixTitle } from '../player/nowPlaying'
 import { Film } from './Film'
+import { SoundJourney } from './SoundJourney'
+import { MotionText } from './MotionText'
+import { MotionControl } from './MotionControl'
 
 // What people use ambient sound for, each with a scene that suits it.
 const MADE_FOR = [
@@ -49,58 +52,66 @@ const QUESTIONS = [
   },
 ]
 
-/** Fades each section in the first time it scrolls into view. */
-function useRevealOnScroll() {
+/** Stop the atmospheric loops when the window is out of view or the tab is hidden. */
+function useAtmosphere() {
   const ref = useRef<HTMLElement>(null)
+  const [visible, setVisible] = useState(true)
+  const [paused, setPaused] = useState(false)
 
   useEffect(() => {
     const root = ref.current
-    // Without the observer (older browsers, tests) everything simply stays visible.
-    if (!root || typeof IntersectionObserver === 'undefined') return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue
-          entry.target.classList.add('is-visible')
-          observer.unobserve(entry.target)
-        }
-      },
-      { threshold: 0.12 },
-    )
-    root.classList.add('reveal-ready')
-    root.querySelectorAll('.reveal').forEach((element) => observer.observe(element))
-    return () => observer.disconnect()
+    let inView = true
+    const update = () => setVisible(inView && !document.hidden)
+    const observer = typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(([entry]) => {
+          inView = entry?.isIntersecting ?? false
+          update()
+        })
+      : null
+    if (root) observer?.observe(root)
+    document.addEventListener('visibilitychange', update)
+    update()
+    return () => {
+      observer?.disconnect()
+      document.removeEventListener('visibilitychange', update)
+    }
   }, [])
 
-  return ref
+  return { ref, running: visible && !paused, paused, setPaused }
 }
 
 export function LandingPage() {
   const engine = useEngine()
   const layers = useLayers()
-  const featured = SCENES[0]!
+  const [selectedScene, setSelectedScene] = useState(SCENES[0]!.id)
+  const featured = SCENES.find((scene) => scene.id === selectedScene)!
   const playing = layers.length > 0
   const loading = layers.some((layer) => layer.status === 'loading')
   const failed = layers.filter((layer) => layer.status === 'error')
-  const revealRef = useRevealOnScroll()
+  const atmosphere = useAtmosphere()
 
   // The mini-player shows whatever is playing; before that, a preview of the featured scene.
   const rows = playing ? layers : featured.layers
   const title = playing ? mixTitle(layers) : featured.name
+  const firstSound = rows[0]!.soundId
+  const world = ['night-forest', 'cicadas', 'wind'].includes(firstSound) ? 'forest'
+    : ['ocean-waves', 'birds-chirping', 'creek'].includes(firstSound) ? 'sea' : 'rain'
+  const backdrop = world === 'forest' ? 'night-forest' : world === 'sea' ? 'ocean-waves' : 'thunderstorm'
+  const previewScenes = [SCENES[0]!, SCENES[1]!, SCENES[3]!]
   // The player opens in its own tab with its own audio, so this tab goes quiet.
   const openPlayer = { to: '/play', target: '_blank', rel: 'noopener', onClick: () => engine.stopAll() }
 
   return (
-    <main className="landing" ref={revealRef}>
-      <section className="hero">
-        <div className="hero-backdrop">
-          {/* The storm photo suits the palette; once something plays, the backdrop follows it. */}
-          <Artwork key={playing ? rows[0]!.soundId : 'idle'} soundId={playing ? rows[0]!.soundId : 'thunderstorm'} />
+    <main className="landing landing-story" data-paused={atmosphere.paused}>
+      <SoundJourney paused={atmosphere.paused} />
+      <MotionControl paused={atmosphere.paused} onToggle={() => atmosphere.setPaused(!atmosphere.paused)} />
+      <section className="hero living-hero" ref={atmosphere.ref} data-world={world} data-motion={atmosphere.running ? 'running' : 'paused'}>
+        <div className="hero-backdrop" aria-hidden="true">
+          <Artwork key={backdrop} soundId={backdrop} priority />
         </div>
         <div className="hero-inner">
           <div className="hero-copy">
-            <h1>Embrace the silence, feel the ambiance.</h1>
+            <h1><MotionText>Embrace the silence,</MotionText><br /> <MotionText>feel the ambiance.</MotionText></h1>
             <p className="lead">
               Ambiancy is a free ambient sound mixer. Layer rain, a fireplace or a coffee shop, set each one's volume,
               and share the mix with a link.
@@ -112,66 +123,86 @@ export function LandingPage() {
           </div>
 
           {/* A working slice of the player, in place of a picture of it. */}
-          <div className="hero-player">
-            <div className="hero-player-head">
-              {playing && (
-                <span className="eq" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                </span>
-              )}
-              <h2>{title}</h2>
-            </div>
-            {!playing && <p className="hint">{featured.description}</p>}
-            <ul className="hero-layers">
-              {rows.map((row) => {
-                const live = layers.find((candidate) => candidate.soundId === row.soundId)
-                const name = getSound(row.soundId)?.name ?? row.soundId
-                return (
-                  <li key={row.soundId}>
-                    <Artwork soundId={row.soundId} />
-                    <span>{name}</span>
-                    <input
-                      type="range"
-                      min={0}
-                      max={100}
-                      value={live?.volume ?? row.volume}
-                      disabled={!live}
-                      aria-label={`${name} volume`}
-                      onChange={(event) => engine.setVolume(row.soundId, Number(event.target.value))}
-                    />
-                  </li>
-                )
-              })}
-            </ul>
-            <button
-              type="button"
-              className="primary"
-              onClick={() => {
-                if (playing) engine.stopAll()
-                else void engine.loadMix(featured.layers)
-              }}
-            >
-              {playing ? 'Stop' : `Play ${featured.name}`}
-            </button>
-            {loading && <p role="status">Loading…</p>}
-            {failed.length > 0 && (
-              <p role="alert">
-                Couldn't load {failed.length === layers.length ? 'the sound' : 'some of the sounds'}.{' '}
-                <button type="button" onClick={() => failed.forEach((layer) => void engine.retryLayer(layer.soundId))}>
-                  Try again
+          <div className="hero-product">
+            <div className="hero-orb-slot" aria-hidden="true" />
+            <div className="hero-player">
+              <div className="hero-scene-picker" role="group" aria-label="Preview an atmosphere">
+                {previewScenes.map((scene) => (
+                  <button key={scene.id} type="button" aria-pressed={playing ? title === scene.name : featured.id === scene.id}
+                    onClick={() => {
+                      setSelectedScene(scene.id)
+                      if (playing) void engine.loadMix(scene.layers)
+                    }}>
+                    {scene.id === 'rainy-cafe' ? 'Rain' : scene.id === 'forest-night' ? 'Forest' : 'Sea'}
+                  </button>
+                ))}
+              </div>
+              <div className="hero-player-head">
+                {playing && (
+                  <span className="eq" aria-hidden="true">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                )}
+                <h2>{title}</h2>
+              </div>
+              {!playing && <p className="hint">{featured.description}</p>}
+              <ul className="hero-layers">
+                {rows.map((row) => {
+                  const live = layers.find((candidate) => candidate.soundId === row.soundId)
+                  const name = getSound(row.soundId)?.name ?? row.soundId
+                  return (
+                    <li key={row.soundId}>
+                      <Artwork soundId={row.soundId} />
+                      <span>{name}</span>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={live?.volume ?? row.volume}
+                        disabled={!live}
+                        aria-label={`${name} volume`}
+                        onChange={(event) => engine.setVolume(row.soundId, Number(event.target.value))}
+                      />
+                    </li>
+                  )
+                })}
+              </ul>
+              <div className="hero-play-row">
+                <button
+                  type="button"
+                  className="primary"
+                  onClick={() => {
+                    if (playing) engine.stopAll()
+                    else void engine.loadMix(featured.layers)
+                  }}
+                >
+                  {playing ? 'Stop' : `Play ${featured.name}`}
                 </button>
-              </p>
-            )}
+                <span className="hero-listening-status">{loading ? 'Connecting…' : playing ? 'Sound is on' : 'Sound is off'}</span>
+              </div>
+              {loading && <p role="status">Loading…</p>}
+              {failed.length > 0 && (
+                <p role="alert">
+                  Couldn't load {failed.length === layers.length ? 'the sound' : 'some of the sounds'}.{' '}
+                  <button type="button" onClick={() => failed.forEach((layer) => void engine.retryLayer(layer.soundId))}>
+                    Try again
+                  </button>
+                </p>
+              )}
+            </div>
           </div>
+        </div>
+        <div className="hero-bottom">
+          <a href="#made-for-heading" className="hero-explore">Find your moment <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6" /></svg></a>
         </div>
       </section>
 
       <Film />
 
       <section className="landing-section made-for reveal" aria-labelledby="made-for-heading">
-        <h2 id="made-for-heading">Made for</h2>
+        <div className="section-intro"><h2 id="made-for-heading"><MotionText>Made for</MotionText></h2><p className="section-index" aria-hidden="true">Focus. Relax. Sleep.</p></div>
         <ul>
           {MADE_FOR.map((item) => {
             const scene = SCENES.find((candidate) => candidate.id === item.sceneId)!
@@ -198,13 +229,13 @@ export function LandingPage() {
         </ul>
       </section>
 
-      <div className="landing-section reveal">
+      <div className="landing-section scene-section reveal">
         <SceneList />
         <p className="hint">Pick a scene to hear it here, then open the player to make it your own.</p>
       </div>
 
       <section className="landing-section steps reveal" aria-labelledby="steps-heading">
-        <h2 id="steps-heading">How it works</h2>
+        <div className="steps-intro"><h2 id="steps-heading"><MotionText>How it works</MotionText></h2><div className="waveform-space" aria-hidden="true" /></div>
         <ol>
           <li>
             <h3>Pick a scene, or build your own</h3>
@@ -222,7 +253,7 @@ export function LandingPage() {
       </section>
 
       <section className="landing-section gallery reveal" aria-labelledby="gallery-heading">
-        <h2 id="gallery-heading">{SOUNDS.length} sounds to layer</h2>
+        <h2 id="gallery-heading"><MotionText>{`${SOUNDS.length} sounds to layer`}</MotionText></h2>
         <ul>
           {SOUNDS.map((sound) => (
             <li key={sound.id}>
@@ -234,7 +265,8 @@ export function LandingPage() {
       </section>
 
       <section className="landing-section questions reveal" aria-labelledby="questions-heading">
-        <h2 id="questions-heading">Questions</h2>
+        <h2 id="questions-heading"><MotionText>Questions</MotionText></h2>
+        <div className="question-list">
         {QUESTIONS.map((item) => (
           <details key={item.question}>
             <summary>{item.question}</summary>
@@ -249,10 +281,12 @@ export function LandingPage() {
             gathered.
           </p>
         </details>
+        </div>
       </section>
 
       <section className="landing-section about reveal" aria-labelledby="about-heading">
-        <h2 id="about-heading">About the project</h2>
+        <h2 id="about-heading"><MotionText>About the project</MotionText></h2>
+        <div className="about-copy">
         <p>
           Ambiancy began in 2025 as a three-person school project: a landing page and a simple web player. It is now
           being rebuilt in the open as a tested, containerised web app, with the way it is built, shipped and run
@@ -264,10 +298,11 @@ export function LandingPage() {
         <a href="https://github.com/chimkenchrls/ambiancy" target="_blank" rel="noreferrer" className="button-link">
           View the code on GitHub
         </a>
+        </div>
       </section>
 
       <section className="closing reveal" aria-labelledby="closing-heading">
-        <h2 id="closing-heading">Find the sound that fits your day.</h2>
+        <h2 id="closing-heading"><MotionText>Find the sound that fits your day.</MotionText></h2>
         <Link {...openPlayer} className="button-link primary">
           Start mixing
         </Link>

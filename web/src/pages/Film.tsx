@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { mediaUrl } from '../catalogue'
 import { useEngine, useLayers } from '../player/PlayerContext'
 import captions from './film.vtt?url'
+import { MotionText } from './MotionText'
 
 /**
  * The half-minute film under the hero. Only its poster loads with the page;
@@ -22,7 +23,7 @@ export function Film() {
 
   return (
     <section className="landing-section film reveal" aria-labelledby="film-heading">
-      <h2 id="film-heading">Ambiancy in 30 seconds</h2>
+      <div className="film-intro"><h2 id="film-heading"><MotionText>Ambiancy in 30 seconds</MotionText></h2><p className="hint">Plays with sound.</p></div>
       <div className="film-frame">
         <video
           ref={video}
@@ -59,7 +60,7 @@ export function Film() {
           </button>
         )}
       </div>
-      {failed ? <p role="alert">Couldn't load the film.</p> : <p className="hint">Plays with sound.</p>}
+      {failed && <p role="alert">Couldn't load the film.</p>}
     </section>
   )
 }

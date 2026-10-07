@@ -7,6 +7,7 @@ import { PlayerProvider } from './player/PlayerContext'
 import '@fontsource/tuffy/400.css'
 import '@fontsource/tuffy/700.css'
 import './styles.css'
+import './pages/landing.css'
 
 // One engine for the whole visit, above the router, so a mix keeps playing
 // while the visitor moves between pages.
