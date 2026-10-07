@@ -42,6 +42,11 @@ export function audioUrl(sound: Sound): string {
   return `${MEDIA_BASE_URL}/${sound.audioFile}`
 }
 
+/** The address of any other file on the media server, such as the landing page film. */
+export function mediaUrl(path: string): string {
+  return `${MEDIA_BASE_URL}/${path}`
+}
+
 export function artworkUrl(sound: Sound): string | null {
   return sound.artwork ? `${MEDIA_BASE_URL}/${sound.artwork}` : null
 }

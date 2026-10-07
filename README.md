@@ -10,6 +10,7 @@ Requirements: Docker, Node 22, FFmpeg.
 
     ./tools/make-dev-sounds.sh     # generate placeholder sounds into media/
     node tools/fetch-artwork.mjs   # download the sound pictures into media/
+    ./tools/make-film.sh           # render the landing page film into media/ (needs `npm install` in remotion/)
     docker compose up -d --build   # web on http://localhost:8080, media on :8081
 
 For development with hot reload:

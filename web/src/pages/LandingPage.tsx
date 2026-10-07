@@ -5,6 +5,7 @@ import { Artwork } from '../player/Artwork'
 import { useEngine, useLayers } from '../player/PlayerContext'
 import { SceneList } from '../player/SceneList'
 import { mixTitle } from '../player/nowPlaying'
+import { Film } from './Film'
 
 // What people use ambient sound for, each with a scene that suits it.
 const MADE_FOR = [
@@ -166,6 +167,8 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      <Film />
 
       <section className="landing-section made-for reveal" aria-labelledby="made-for-heading">
         <h2 id="made-for-heading">Made for</h2>

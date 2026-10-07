@@ -377,6 +377,61 @@ input[type='range'] {
   margin-top: 1rem;
 }
 
+/* The film: a poster with one button, which becomes the video when pressed. */
+.film-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--night);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+}
+
+.film-frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Sits in the empty band under the mixer in the poster. */
+.film-play {
+  position: absolute;
+  left: 50%;
+  top: 84%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.4rem 1.3rem 0.4rem 0.4rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: rgba(21, 14, 26, 0.55);
+  border-color: var(--lavender);
+  backdrop-filter: blur(6px);
+}
+
+.film-play-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #0a070d;
+}
+
+.film-play-icon svg {
+  fill: currentColor;
+}
+
+.film-length {
+  color: var(--muted);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
 /* Made for: three photo panels, each with a scene to hear. */
 .made-for ul {
   list-style: none;
@@ -1382,6 +1437,21 @@ thead th {
 
   .made-for li {
     min-height: 16rem;
+  }
+
+  .film-frame {
+    border-radius: 14px;
+  }
+
+  .film-play {
+    gap: 0.5rem;
+    padding: 0.25rem 0.9rem 0.25rem 0.25rem;
+    font-size: 0.85rem;
+  }
+
+  .film-play-icon {
+    width: 1.9rem;
+    height: 1.9rem;
   }
 
   .gallery ul {

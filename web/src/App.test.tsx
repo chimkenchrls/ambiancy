@@ -44,6 +44,49 @@ describe('landing page', () => {
   })
 })
 
+describe('landing page film', () => {
+  it('offers the film under the hero without loading it until asked', () => {
+    renderWithEngine(<AppRoutes />, { route: '/' })
+
+    const film = screen.getByRole('region', { name: 'Ambiancy in 30 seconds' })
+    expect(within(film).getByRole('button', { name: /Watch the film/ })).toBeInTheDocument()
+    const video = film.querySelector('video')!
+    expect(video).toHaveAttribute('preload', 'none')
+    expect(video).not.toHaveAttribute('controls')
+    expect(video.querySelector('track')).toHaveAttribute('kind', 'captions')
+  })
+
+  it('never plays the film and a mix together', async () => {
+    const user = userEvent.setup()
+    // jsdom has no media playback: stand in for the browser starting and pausing the video.
+    const play = vi.spyOn(HTMLMediaElement.prototype, 'play').mockImplementation(function (this: HTMLMediaElement) {
+      Object.defineProperty(this, 'paused', { value: false, configurable: true })
+      fireEvent.play(this)
+      return Promise.resolve()
+    })
+    const pause = vi.spyOn(HTMLMediaElement.prototype, 'pause').mockImplementation(() => {})
+    const { engine } = renderWithEngine(<AppRoutes />, { route: '/' })
+    const featured = SCENES[0]!
+    await user.click(screen.getByRole('button', { name: `Play ${featured.name}` }))
+    await screen.findByRole('button', { name: 'Stop' })
+
+    // Starting the film silences the mix and hands over to the video's own controls.
+    await user.click(screen.getByRole('button', { name: /Watch the film/ }))
+    expect(play).toHaveBeenCalled()
+    expect(engine.getMix()).toEqual([])
+    expect(screen.queryByRole('button', { name: /Watch the film/ })).not.toBeInTheDocument()
+    expect(document.querySelector('video')).toHaveAttribute('controls')
+
+    // Starting a mix pauses the film.
+    expect(pause).not.toHaveBeenCalled()
+    await user.click(screen.getByRole('button', { name: `Play ${featured.name}` }))
+    await waitFor(() => expect(pause).toHaveBeenCalled())
+
+    play.mockRestore()
+    pause.mockRestore()
+  })
+})
+
 describe('landing page sections', () => {
   it('suggests a scene for focus, relaxing and sleep, playable in place', async () => {
     const user = userEvent.setup()
